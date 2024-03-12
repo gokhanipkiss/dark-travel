@@ -3,7 +3,6 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import { View, Text, StyleSheet, Image, Button } from 'react-native';
 
 
-
 const slides = [
     {
         key: 'slide1',

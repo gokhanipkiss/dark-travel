@@ -1,15 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Alert,
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View
-} from 'react-native';
+import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Intro from './components/Intro';
 import Login from './components/Login';
@@ -31,10 +21,9 @@ function App(){
               const result = await AsyncStorage.getItem('previouslyLaunched');
               if (result === undefined || result === null){
                 setFirstRun(true)
-                const res = await AsyncStorage.setItem('previouslyLaunched', 'previouslyLaunched');
-                if (res){
-                    console.log("previouslyLaunched set")
-                }
+                const res = await AsyncStorage.setItem('previouslyLaunched', 'previouslyLaunched', ()=>{
+                  console.log("previouslyLaunched set")
+                });
               }
             } catch(e) {
               console.log("getItem error")
