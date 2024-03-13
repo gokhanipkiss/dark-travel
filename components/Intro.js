@@ -51,9 +51,9 @@ const Intro = (props) => {
         );
     }; 
     
-    const handleDone = () => {
-        props.closeIntro();
-    }
+    // const handleDone = () => {
+    //     props.closeIntro();
+    // }
 
     const renderDoneButton = () => {
         return <Button title='Done' color={'black'} onPress={props.closeIntro} />
