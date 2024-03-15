@@ -1,14 +1,13 @@
 import React from 'react';
 import { Text, StyleSheet, View, SafeAreaView } from 'react-native';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
-const Home = () => {
+const Planlar = () => {
 
 
     return (
         <View style={styles.container}>
             <Text style={styles.titleText}>
-                Home Page
+                Planlar
             </Text>
         </View>
     );
@@ -31,4 +30,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Home;
+export default Planlar;

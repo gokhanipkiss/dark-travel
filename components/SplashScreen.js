@@ -6,7 +6,7 @@ const SplashScreen = () => {
         <SafeAreaView>
             <ImageBackground source={require('../assets/images/splash.jpg')} style={styles.image}>
                 <View style={styles.container}>                    
-                    <Text style={styles.title}>Dark Travel</Text>
+                    <Text style={styles.title}>odisea</Text>
                 </View>
             </ImageBackground>
         </SafeAreaView>

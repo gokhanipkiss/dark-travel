@@ -5,15 +5,16 @@ import CustomButton from '../custom-components/CustomButton';
 
 const Login = () => {
 
+    //TODO: Let's use useForm hook instead
     const [ username, setUsername ] = useState ( "" );
     const [ password, setPassword ] = useState ( "" );
 
-    const onChangeUserName = () => {
-
+    const onChangeUserName = (e) => {
+        setUsername(e.value)
     }
 
-    const onChangePassword = () => {
-
+    const onChangePassword = (e) => {
+        setPassword(e.value)
     }
 
     const handleSubmit = () => {
@@ -21,7 +22,7 @@ const Login = () => {
     }
 
     return (
-        <SafeAreaView style={styles.main}>
+        <View style={styles.main}>
             <View style={styles.header}>
                 <Text style={styles.titleText}>
                     Giriş
@@ -39,6 +40,8 @@ const Login = () => {
                 onChangeText={onChangePassword}
                 placeholder='Şifre'
                 value={password}
+                textContentType='password'
+                secureTextEntry
             />
             <CustomButton 
                 title="Giriş Yap" 
@@ -50,14 +53,17 @@ const Login = () => {
             <Text style={styles.infoText}>Kaydolmak için tıklayın</Text>
       
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     main: {
         flex:1,
-        justifyContent:'space-around'
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        backgroundColor: 'black',
+        color:'white'
     },
     input: {
         width:200,

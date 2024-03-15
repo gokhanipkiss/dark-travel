@@ -4,11 +4,29 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Intro from './components/Intro';
 import Login from './components/Login';
 import SplashScreen from './components/SplashScreen';
+import Home from './components/Home';
+import Profil from './components/Profil';
+import Komunite from './components/Komunite';
+import Planlar from './components/Planlar';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MyTabBar from './custom-components/MyTabBar';
+
 
 function App(){
 
+    const Tab = createBottomTabNavigator();
+
     const [splashTimedOut, setSplashTimedOut] = useState(false);
     const [firstRun, setFirstRun] = useState(false);
+    
+    //TODO : Implement Authentication
+    const isLoggedIn = true;
+
+    useEffect(()=>{
+      showSplash();
+      checkFirstRun();
+  }, [])
     
     const showSplash = () => {
       setTimeout(
@@ -34,29 +52,37 @@ function App(){
       setFirstRun(false)
     }
 
-    useEffect(()=>{
-        showSplash();
-        checkFirstRun();
-    }, [])
-
 
   return (
     !splashTimedOut ?
       <SplashScreen />
-      :
-      
+      :      
       (
         firstRun ?
           <Intro closeIntro={closeIntro}/>          
-          
           :
           (  
-            <SafeAreaView style={styles.main}   /* TODO: Let's use React.Lazy here */ >
-              <StatusBar  /* gerekli mi? */  />              
-              <View >
-                <Login />
-              </View>
-            </SafeAreaView >
+            <View style={styles.main}>
+            {
+            !isLoggedIn ? 
+              <Login />
+              :            
+              <NavigationContainer>                    
+                <Tab.Navigator
+                  initialRouteName="Home"
+                  screenOptions = { ({}) =>  ({
+                    headerShown: false
+                  }) }
+                  tabBar = {(props) => {return <MyTabBar {...props}  />}}
+                >
+                  <Tab.Screen name="Keşfet" component={Home} />
+                  <Tab.Screen name="Komünite" component={Komunite} />
+                  <Tab.Screen name="Planlar" component={Planlar} />
+                  <Tab.Screen name="Profil" component={Profil} />
+                </Tab.Navigator>                  
+              </NavigationContainer>
+            }
+            </View>
           )
       )
   );
@@ -64,11 +90,7 @@ function App(){
 
 const styles = StyleSheet.create({
     main:{
-      flex:1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'black',
-      color:'white'
+      flex:1
     },
     text: {
       color: 'white'
