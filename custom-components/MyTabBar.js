@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import HomeIcon from '../assets/icons/home1.svg'
 
 const iconMap = {
     Keşfet: 'location-arrow',
@@ -42,8 +43,7 @@ function MyTabBar({ state, descriptors, navigation }) {
         };
 
         return (
-         
-            
+
             <TouchableOpacity
               key={route.key}
               accessibilityRole="button"
@@ -55,7 +55,7 @@ function MyTabBar({ state, descriptors, navigation }) {
               style={{ flex: 1 }}
             > 
               <Text style={styles.text}>
-                <Icon name={iconMap[route.name]} size={30} color={isFocused ? styles.textFocused.color : styles.text.color} />
+                <Icon name={iconMap[route.name]} size={28} color={isFocused ? styles.textFocused.color : styles.text.color} />
               </Text>
               <Text style={isFocused ? styles.textFocused : styles.text}>
                 {label}
@@ -71,7 +71,7 @@ function MyTabBar({ state, descriptors, navigation }) {
 const styles = StyleSheet.create({
   tabBar: {
     flexDirection: 'row',
-    backgroundColor: 'black'    
+    backgroundColor: 'black'
   },
   textFocused: {
     color: 'firebrick',

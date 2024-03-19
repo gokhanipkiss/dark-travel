@@ -11,7 +11,9 @@ import Planlar from './components/Planlar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MyTabBar from './custom-components/MyTabBar';
+import { signal } from '@preact/signals-react';
 
+export const isLoggedIn = signal(false);
 
 function App(){
 
@@ -20,12 +22,9 @@ function App(){
     const [splashTimedOut, setSplashTimedOut] = useState(false);
     const [firstRun, setFirstRun] = useState(false);
     
-    //TODO : Implement Authentication
-    const isLoggedIn = true;
-
     useEffect(()=>{
       showSplash();
-      checkFirstRun();
+      checkFirstRun()
   }, [])
     
     const showSplash = () => {
@@ -64,7 +63,7 @@ function App(){
           (  
             <View style={styles.main}>
             {
-            !isLoggedIn ? 
+            !isLoggedIn.value ?
               <Login />
               :            
               <NavigationContainer>                    
