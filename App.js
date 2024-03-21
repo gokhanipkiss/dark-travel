@@ -8,6 +8,7 @@ import { signal } from '@preact/signals-react';
 import StackMain from './StackMain';
 
 export const isLoggedIn = signal(false);
+export const currentUser = signal({});
 
 function App(){
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { Card } from 'react-native-paper';
+import { Card, Switch } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { isLoggedIn } from '../App';
 
@@ -49,15 +49,27 @@ const Settings = () => {
    
 
     return (
-        <View style={styles.main}>
+        <View style={styles.main}>            
+            <View style={styles.topCard}>
+                <View>
+                    <Text style={styles.menuItemText}>Karanlık Tema</Text>
+                </View>
+                <View>
+                    <Switch value={true} trackColor='white' color='dodgerblue' />
+                </View>
+            </View>            
             <FlatList data={settingsList} renderItem={({item})=> {                
                 return (
                   <Card style={styles.menuCard}>
                     <TouchableOpacity onPress={item.onPress}>
-                      <Text style={styles.menuItemText}>
-                        <Icon name={item.icon} color="ivory" size={24} />{' '}
+                      <View style={styles.menuItem}>
+                      <Text style={styles.icon}>
+                        <Icon name={item.icon} color="ivory" size={24} />
+                      </Text>
+                      <Text style={styles.menuItemText}>                        
                         {item.name}
                       </Text>
+                      </View>
                     </TouchableOpacity>
                   </Card>
                 );
@@ -74,17 +86,34 @@ const Settings = () => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
+    backgroundColor: 'black',
+    paddingHorizontal: 15,
+    paddingTop:15
+  },
+  menuCard: {    
+    height: 60,
+    paddingVertical:15,
     backgroundColor: 'black'
   },
-  menuCard: {
-    flexDirection: 'row',
-    height: 70,
-    padding:20,
-    backgroundColor: 'black'
+  menuItem:{
+    flexDirection: 'row'
   },
-  menuItemText:{
+  icon: {
+    width: 40,
+    textAlign: 'center',
+    marginRight: 7
+
+  },
+  menuItemText:{    
     color:'ivory',
     fontSize: 20
+  },
+  topCard: {
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    height: 70,
+    paddingVertical:20,
+    backgroundColor: 'black'
   }
 });
 

@@ -11,7 +11,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomButton from '../custom-components/CustomButton';
 import axios from 'axios';
 import {Checkbox} from 'react-native-paper';
-import {isLoggedIn} from '../App';
+import {currentUser, isLoggedIn} from '../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
@@ -69,13 +69,18 @@ const Login = () => {
     let users_ = usersData || users;
     let user = users_.find(i => i.name === username);
     if (user) {
-      if (user.password === password) isLoggedIn.value = true;
+      if (user.password === password){
+        isLoggedIn.value = true;
+        currentUser.value = user
+      }
       else console.log('Kullanici veya sifre hatali');
       //TODO : View on screen
     } else {
       let user = users_.find(i => i.email === username);
-
-      if (user && user.password === password) isLoggedIn.value = true;
+      if (user && user.password === password){
+        isLoggedIn.value = true;
+        currentUser.value = user
+      } 
       else console.log('Kullanici veya sifre hatali');
       //TODO : View on screen
     }
