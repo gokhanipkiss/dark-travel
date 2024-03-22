@@ -1,6 +1,6 @@
 import { StackActions } from '@react-navigation/native';
 import React from 'react';
-import { Text, StyleSheet, View, SafeAreaView, Image, Touchable, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, View, SafeAreaView, Image, Touchable, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { currentUser } from '../App';
 import { personaMap } from '../utils/ShortNameMaps';
@@ -15,19 +15,22 @@ const Profil = ({navigation}) => {
     }
 
     const {container, text, topBar, centerSection, userInfoCard, avatarImage, userInfo, usernameText, badgesSection, badgesTitle,
-    badgesContainer, badge, favoritesSection, favoritesCard, favoritesImage, favoritesText} = styles;
+        badgesContainer, badge, favoritesSection, favoritesCard, favoritesImage, favoritesText, memoriesSection, memoriesCard,
+        memoriesImage, memoriesText, memoriesTitle, scrollView} = styles;
 
     return (
-      <View style={container}>
+    <SafeAreaView style={container} >
+      <ScrollView style={scrollView} >
         <View style={topBar}>
           <Icon.Button
             name="settings"
-            size={28}
+            size={26}
             backgroundColor="black"
             color="ivory"
             onPress={goToSettings}
           />
         </View>
+
         <View style={centerSection}>
           <View style={userInfoCard}>
             <Image style={avatarImage} source={require('../assets/images/splash.jpg')} />
@@ -38,14 +41,14 @@ const Profil = ({navigation}) => {
             </View>                        
           </View>
           <View style={badgesSection} >
-            <View style={badgesTitle}> 
+            <TouchableOpacity style={badgesTitle}> 
                 <Text style={{...text, fontSize:20}}>
                     Başarımlarım
                 </Text>
                 <Icon name="chevron-right" color='ivory' size={26} />
-            </View>            
+            </TouchableOpacity>            
             <ScrollView horizontal /*showsHorizontalScrollIndicator çalışmadı*/ style={badgesContainer}>
-                {currentUser.value.badges.map((item,index) => {
+                {currentUser.value.badges.map((item, index) => {
                     return (
                     <Image key={index} style={badge} source={require('../assets/images/splash.jpg')} />
                     )
@@ -68,34 +71,64 @@ const Profil = ({navigation}) => {
             </TouchableOpacity>
           </View>
 
+          <View style={memoriesSection}>
+          <TouchableOpacity style={memoriesTitle}> 
+                <Text style={{...text, fontSize:20}}>
+                    Anılarım
+                </Text>
+                <Icon name="chevron-right" color='ivory' size={26} />
+            </TouchableOpacity>
+            {currentUser.value.memories.map((item, index) => {
+                return(
+                <TouchableOpacity key={index} style={memoriesCard}>
+                    <Image style={memoriesImage} source={require('../assets/images/splash.jpg')} />
+                    <View style={{flex:1}}>
+                        <Text style={memoriesText}>
+                            <Text style={{fontWeight:'bold'}}>
+                                {item} {'\n'}
+                            </Text>
+                            Lorem ipsum
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            )})}
+          </View>
+
         </View>
-      </View>
+
+      </ScrollView>
+      </SafeAreaView>
+    
     );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex:1,
     alignContent: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: 'black',
+    backgroundColor: 'black'
+  },
+  scrollView: {
+   
   },
   text: {
     color: 'ivory',
     fontSize: 18
   },
   centerSection: {
-    flex:1
+    
   },
 
   topBar: {
-    padding:15,
+    padding:12,
     paddingBottom: 0,
     justifyContent: 'center',
     alignItems: 'flex-end'
   },
 
   userInfoCard: {
+    marginTop:-5,
     paddingHorizontal: 20,
     flexDirection:'row'
   },
@@ -115,21 +148,22 @@ const styles = StyleSheet.create({
   },
 
   badgesSection:{
-    paddingTop:20
+    paddingTop:10
   },
   badgesTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding:20
+    padding:20,
+    paddingBottom:3
   },
   badgesContainer: {
     paddingHorizontal:10,
-    width:'90%'
+    width:'95%'
   },
   badge: {
-    width:60,
-    height:60,
-    borderRadius:30,
+    width:54,
+    height:54,
+    borderRadius:27,
     borderColor: 'firebrick',
     borderWidth: 2,
     margin:5
@@ -138,7 +172,7 @@ const styles = StyleSheet.create({
   favoritesSection: {
     paddingTop:20,
     paddingHorizontal:10,
-    height:'22%'
+    height: Dimensions.get('window').height * 0.22
   },
   favoritesCard: {
     height:'100%',
@@ -156,7 +190,37 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     paddingLeft: 10 
-  }
+  },
+
+  memoriesSection: {
+    paddingTop:20,
+    paddingHorizontal:10
+  },
+  memoriesTitle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding:10,
+    paddingTop:0
+  },
+  memoriesCard: {
+    height:100,
+    backgroundColor: 'ivory',
+    borderRadius:5,
+    flexDirection: 'row',
+    padding: 10,
+    marginBottom:10
+  },
+  memoriesImage: {
+    width: '35%',
+    height: '100%',
+    borderRadius: 5
+  },
+  memoriesText: {
+    color: 'black',
+    fontSize: 16,
+    paddingLeft: 10 
+  },
+
 
 
 });

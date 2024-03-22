@@ -55,7 +55,7 @@ function MyTabBar({ state, descriptors, navigation }) {
               style={{ flex: 1 }}
             > 
               <Text style={styles.text}>
-                <Icon name={iconMap[route.name]} size={28} color={isFocused ? styles.textFocused.color : styles.text.color} />
+                <Icon name={iconMap[route.name]} size={26} color={isFocused ? styles.textFocused.color : styles.text.color} />
               </Text>
               <Text style={isFocused ? styles.textFocused : styles.text}>
                 {label}
@@ -71,15 +71,18 @@ function MyTabBar({ state, descriptors, navigation }) {
 const styles = StyleSheet.create({
   tabBar: {
     flexDirection: 'row',
-    backgroundColor: 'black'
+    backgroundColor: 'black',
+    paddingTop:10
   },
   textFocused: {
     color: 'firebrick',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 12
   },
   text: {
     color: 'ivory',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 12
   }
 })
 
