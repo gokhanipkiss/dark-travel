@@ -6,6 +6,7 @@ import {
   TextInput,
   Button,
   ActivityIndicator,
+  Alert
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomButton from '../custom-components/CustomButton';
@@ -14,20 +15,25 @@ import {Checkbox} from 'react-native-paper';
 import {currentUser, isLoggedIn} from '../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const errorMessages= {
+    emailErrorTitle: "Bu e-posta ile herhangi bir kayıt bulunmadı",
+    passwordErrorTitle: "Hatalı şifre",
+    connectionErrorTitle: "Bağlantı hatası"
+}
+
 const Login = () => {
   //TODO: Let's use useForm hook instead
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [remember, setRemember] = useState(false);
 
   async function getStorage() {
-    const result = await AsyncStorage.getItem('username');
+    const result = await AsyncStorage.getItem('email');
     if (result !== undefined && result !== null) {
-      setUsername(result);
+      setEmail(result);
       setRemember(true);
-      //console.log("remembered user:" + result)
     }
   }
 
@@ -37,21 +43,23 @@ const Login = () => {
 
   const getUsers = async () => {
     setLoading(true);
-    let response = await axios.get(
-      'https://my-json-server.typicode.com/gokhanipkiss/mockJson/users',
-    );
-    if (response.data) {
-      console.log('Response : %O', response.data);
-      setUsers(response.data);
-      checkUserAndPassword(response.data);
-    } else {
-      console.log('Error: Could not get users');
+    try {
+      let response = await axios.get(
+        'https://my-json-server.typicode.com/gokhanipkiss/mockJson/users',
+      );
+      if (response.data) {
+        console.log('Response : %O', response.data);
+        setUsers(response.data);
+        checkUserAndPassword(response.data);
+      }
+    } catch (err) {
+      showAlert('connection');
     }
     setLoading(false);
   };
 
-  const onChangeUserName = value => {
-    setUsername(value);
+  const onChangeEmail = value => {
+    setEmail(value);
   };
 
   const onChangePassword = value => {
@@ -67,23 +75,15 @@ const Login = () => {
 
   function checkUserAndPassword(usersData) {
     let users_ = usersData || users;
-    let user = users_.find(i => i.name === username);
-    if (user) {
-      if (user.password === password){
-        isLoggedIn.value = true;
-        currentUser.value = user
-      }
-      else console.log('Kullanici veya sifre hatali');
-      //TODO : View on screen
-    } else {
-      let user = users_.find(i => i.email === username);
-      if (user && user.password === password){
-        isLoggedIn.value = true;
-        currentUser.value = user
-      } 
-      else console.log('Kullanici veya sifre hatali');
-      //TODO : View on screen
-    }
+    let user = users_.find(i => i.email === email);
+    if (user) {        
+        if (user.password === password){
+          isLoggedIn.value = true;
+          currentUser.value = user
+        } 
+        else showAlert('password')
+        
+    } else showAlert('email')
   }
 
   const handleSubmit = async () => {
@@ -93,9 +93,28 @@ const Login = () => {
     } else {
       checkUserAndPassword();
     }
-    await AsyncStorage.setItem('username', remember ? username : '');
+    await AsyncStorage.setItem('email', remember ? email : '');
   };
 
+  function showAlert(type) {
+    console.log(type)
+    const {emailErrorTitle, passwordErrorTitle, connectionErrorTitle} = errorMessages;
+     Alert.alert(
+        type === 'email' ? emailErrorTitle : (type === 'password' ? passwordErrorTitle : connectionErrorTitle),
+        "",
+        [
+            {
+                text: 'Tamam',
+                onPress: () => {}
+            }
+        ],
+        {
+            cancelable: true,
+            onDismiss: () => {}
+        }
+     )
+  }
+ 
   return (
     <View style={styles.main}>
       <View style={styles.header}>
@@ -104,9 +123,9 @@ const Login = () => {
       <View>
         <TextInput
           style={styles.input}
-          onChangeText={onChangeUserName}
-          placeholder="Kullanıcı adı/e-posta"
-          value={username}
+          onChangeText={onChangeEmail}
+          placeholder="E-posta"
+          value={email}
         />
         <TextInput
           style={styles.input}
