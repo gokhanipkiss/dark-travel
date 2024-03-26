@@ -1,11 +1,12 @@
 import { StackActions } from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Text, StyleSheet, View, SafeAreaView, Image, Touchable, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { currentUser } from '../App';
 import { personaMap } from '../utils/ShortNameMaps';
 import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import { Card } from 'react-native-paper';
+
 
 
 const Profil = ({navigation}) => {
