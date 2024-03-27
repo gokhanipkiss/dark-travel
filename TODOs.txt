@@ -3,3 +3,7 @@
 Login page view / hide password
 Signup page
 Forgot password
+
+Home page background image, üst tuşlar
+Tekrar eden başlıklar için Custom component
+Home search bar ve tag'ler işlevleri

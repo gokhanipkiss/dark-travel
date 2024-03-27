@@ -14,6 +14,7 @@ import axios from 'axios';
 import {Checkbox} from 'react-native-paper';
 import {currentUser, isLoggedIn} from '../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { mockJsonUrl } from '../utils/Urls';
 
 const errorMessages= {
     emailErrorTitle: "Bu e-posta ile herhangi bir kayıt bulunmadı",
@@ -45,7 +46,7 @@ const Login = () => {
     setLoading(true);
     try {
       let response = await axios.get(
-        'https://my-json-server.typicode.com/gokhanipkiss/mockJson/users',
+        mockJsonUrl + '/users',
       );
       if (response.data) {
         console.log('Response : %O', response.data);
