@@ -11,10 +11,11 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomButton from '../custom-components/CustomButton';
 import axios from 'axios';
-import {Checkbox} from 'react-native-paper';
+import {Checkbox, IconButton} from 'react-native-paper';
 import {currentUser, isLoggedIn} from '../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { mockJsonUrl } from '../utils/Urls';
+
 
 const errorMessages= {
     emailErrorTitle: "Bu e-posta ile herhangi bir kayıt bulunmadı",
@@ -29,6 +30,7 @@ const Login = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [remember, setRemember] = useState(false);
+  const [showPassword, setShowPassword ] = useState(false);
 
   async function getStorage() {
     const result = await AsyncStorage.getItem('email');
@@ -73,6 +75,10 @@ const Login = () => {
     let oldValue = !!remember;
     setRemember(!oldValue);
   };
+
+  function toggleShowPassword () {
+    setShowPassword(!showPassword)
+  }
 
   function checkUserAndPassword(usersData) {
     let users_ = usersData || users;
@@ -128,17 +134,20 @@ const Login = () => {
           placeholder="E-posta"
           value={email}
         />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangePassword}
-          placeholder="Şifre"
-          value={password}
-          textContentType="password"
-          secureTextEntry
-        />
+        <View style={[styles.input, {flexDirection: 'row', justifyContent:'space-between', alignItems:'center'} ]}>
+          <TextInput
+            style={{fontSize:20, width:150}}
+            onChangeText={onChangePassword}
+            placeholder="Şifre"
+            value={password}
+            textContentType="password"
+            secureTextEntry={!showPassword}
+          />
+          <IconButton icon={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color={'black'} onPress={toggleShowPassword} />          
+        </View>
         <View style={styles.remember}>
           <Checkbox
-            color="ivory"
+            color="white"
             status={remember ? 'checked' : 'unchecked'}
             onPress={onChangeRemember}
           />
@@ -172,7 +181,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 200,
-    backgroundColor: 'ivory',
+    backgroundColor: 'white',
     fontSize: 20,
     marginBottom: 20,
     borderRadius: 5,
@@ -181,10 +190,10 @@ const styles = StyleSheet.create({
   titleText: {
     textAlign: 'center',
     fontSize: 30,
-    color: 'ivory',
+    color: 'white',
   },
   infoText: {
-    color: 'ivory',
+    color: 'white',
     fontSize: 15,
   },
   remember: {

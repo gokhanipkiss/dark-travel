@@ -27,7 +27,7 @@ const Profil = ({navigation}) => {
             name="settings"
             size={26}
             backgroundColor="black"
-            color="ivory"
+            color="white"
             onPress={goToSettings}
           />
         </View>
@@ -46,7 +46,7 @@ const Profil = ({navigation}) => {
                 <Text style={{...text, fontSize:20}}>
                     Başarımlarım
                 </Text>
-                <Icon name="chevron-right" color='ivory' size={26} />
+                <Icon name="chevron-right" color='white' size={26} />
             </TouchableOpacity>            
             <ScrollView horizontal /*showsHorizontalScrollIndicator çalışmadı*/ style={badgesContainer}>
                 {currentUser.value.badges.map((item, index) => {
@@ -77,7 +77,7 @@ const Profil = ({navigation}) => {
                 <Text style={{...text, fontSize:20}}>
                     Anılarım
                 </Text>
-                <Icon name="chevron-right" color='ivory' size={26} />
+                <Icon name="chevron-right" color='white' size={26} />
             </TouchableOpacity>
             {currentUser.value.memories.map((item, index) => {
                 return(
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
    
   },
   text: {
-    color: 'ivory',
+    color: 'white',
     fontSize: 18
   },
   centerSection: {
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   usernameText: {
     fontSize: 26,
     fontWeight: 'bold', 
-    color:'ivory'
+    color:'white'
   },
 
   badgesSection:{
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
   favoritesCard: {
     height:'100%',
-    backgroundColor: 'ivory',
+    backgroundColor: 'white',
     borderRadius:5,
     flexDirection: 'row',
     padding: 10
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   },
   memoriesCard: {
     height:100,
-    backgroundColor: 'ivory',
+    backgroundColor: 'white',
     borderRadius:5,
     flexDirection: 'row',
     padding: 10,

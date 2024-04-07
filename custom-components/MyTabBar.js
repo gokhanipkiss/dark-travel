@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   text: {
-    color: 'ivory',
+    color: 'white',
     textAlign: 'center',
     fontSize: 12
   }

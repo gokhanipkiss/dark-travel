@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
     titleText: {
         textAlign: 'center',
         fontSize:24,
-        color:'ivory'
+        color:'white'
     },
     text: {
-        color:'ivory'
+        color:'white'
     }
 })
 

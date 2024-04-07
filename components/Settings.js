@@ -64,7 +64,7 @@ const Settings = () => {
                     <TouchableOpacity onPress={item.onPress}>
                       <View style={styles.menuItem}>
                       <Text style={styles.icon}>
-                        <Icon name={item.icon} color="ivory" size={24} />
+                        <Icon name={item.icon} color="white" size={24} />
                       </Text>
                       <Text style={styles.menuItemText}>                        
                         {item.name}
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
 
   },
   menuItemText:{    
-    color:'ivory',
+    color:'white',
     fontSize: 20
   },
   topCard: {
