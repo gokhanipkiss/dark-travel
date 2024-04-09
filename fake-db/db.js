@@ -16,7 +16,7 @@ const db =
         sex: "M",
         email: "h.atakan@gmail.com",
         password: "Abcd.3456",
-        location: "Ankara",
+        location: "Ankara, Türkiye",
         persona: "myst",
         badges: ["badge2", "badge3"],
         friendCount: 12,
@@ -29,7 +29,7 @@ const db =
         sex: "M",
         email: "ahmety@gmail.com",
         password: "1",
-        location: "Konya",
+        location: "Konya, Türkiye",
         persona:"adv",
         badges: ["badge1", "badge2", "badge3"],
         friendCount: 5,
@@ -42,7 +42,7 @@ const db =
         sex: "F",
         email: "esinsahin83@hotmail.com",
         password: "333444_aBc",
-        location: "Istanbul",
+        location: "İstanbul, Türkiye",
         persona:"hist",
         badges:["badge1"],
         friendCount: 21,
@@ -67,7 +67,7 @@ const db =
           id:3,
           name: "Manyetik Yol",
           location:"Erzurum, Türkiye",
-          categories: ["hist"]
+          categories: ["hist","myst"]
       }
     ],
     
@@ -98,28 +98,36 @@ const db =
         name: "Kahırlar Köyü",
         leader: "Ruhi Akdeniz",
         leaderTitle: "En sevilen lider",
-        body: "Mezar soyguncularının başına gelen esrarengiz olayların izini sürüyoruz."
+        body: "Mezar soyguncularının başına gelen esrarengiz olayların izini sürüyoruz.",
+        categories: ["myst", "adv"],
+        location: "Konya, Türkiye"
       },
       {
         id:2,
         name: "Takunyalı Tezveren",
         leader: "Sevda Dernek",
         leaderTitle: "En sevilen lider",
-        body: "Tezveren Sultan Anadolu'nun en bilinen kadın evliyalarından biridir."
+        body: "Tezveren Sultan Anadolu'nun en bilinen kadın evliyalarından biridir.",
+        categories: ["myst"],
+        location: "Kayseri, Türkiye"
       },
       {	
         id:3,
         name: "Yerebatan Sarnıcı",
         leader: "Emre Aydın",
         leaderTitle: "En sevilen lider",
-        body: "İstanbul sokaklarının altında bir Bizans mühendisliği harikası."
+        body: "İstanbul sokaklarının altında bir Bizans mühendisliği harikası.",
+        categories: ["hist", "trend"],
+        location: "İstanbul, Türkiye"
       },
       {
         id:4,
         name: "Cebeci Asri Mezarlığı",
         leader: "Emre Aydın",
         leaderTitle: "En sevilen lider",
-        body: "1935 yılında Martin Elsaesser tarafından tasarlan mezarlığı geziyoruz."
+        body: "1935 yılında Martin Elsaesser tarafından tasarlan mezarlığı geziyoruz.",
+        categories: ["hist"],
+        location: "Ankara, Türkiye"
         
       }
       
@@ -135,5 +143,5 @@ const db =
   mock.onGet('/api/places').reply(200, db.places)
 
   mock.onGet('/api/stories').reply(200, db.stories)
-  
+
   mock.onGet('/api/tours').reply(200, db.tours)

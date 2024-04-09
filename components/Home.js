@@ -6,21 +6,25 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { tags } from '../utils/Tags';
 import { showConnectionAlert } from '../utils/CommonAlerts';
 import axios from 'axios';
-
-
+import {currentUser} from '../App';
 
 
 const Home = () => {
 
     const [locations, setLocations] = useState([]);
+    const [locationsFiltered, setLocationsFiltered] = useState([])
     const [tours, setTours] = useState([]);
+    const [toursFiltered, setToursFiltered] = useState([]);
     const [stories, setStories] = useState([]);
     const [loadingLocations, setLoadingLocations ] = useState(true);
     const [loadingTours, setLoadingTours ] = useState(true);
+    const [category, setCategory] = useState(tags[0])
+
 
     useEffect(() => {
         getLocations();
         getTours();
+        console.log("current user : %O", currentUser.value )
     }, []);
 
     async function getLocations() {
@@ -30,7 +34,8 @@ const Home = () => {
           '/api/places',
         );
         if (response.data) {
-          setLocations(response.data)
+          setLocations(response.data);
+          handleClickTag(category)
         }
       } catch (err) {
         showConnectionAlert();
@@ -51,10 +56,34 @@ const Home = () => {
           showConnectionAlert();
         }
         setLoadingTours(false);
-      }
+    }
+
+    function handleClickTag(title) {
+        console.log(title)
+        setCategory(title)
+
+        switch (title){
+            case "Trendler":
+                setLocationsFiltered(locations.filter(loc => loc.categories.includes("trend")));
+                setToursFiltered(tours.filter(tour => tour.categories.includes("trend")));
+                break;
+            case "Gizemli":
+                setLocationsFiltered(locations.filter(loc => loc.categories.includes("myst")))
+                setToursFiltered(tours.filter(tour => tour.categories.includes("myst")))
+                break;
+            case "Bana Yakın":
+                setLocationsFiltered(locations.filter(loc => loc.location === currentUser.value.location))
+                setToursFiltered(tours.filter(tour => tour.location === currentUser.value.location))
+                break;
+            case "Güncel":
+                setLocationsFiltered(locations)
+                setToursFiltered(tours)
+                break;
+        }
+    }
 
     const {container, text, scrollView, topButtonContainer, searchBarContainer, titleText, searchBar,
-        textInput, chipContainer, chip, placesHeader, placesContainer, sectionTitle, locationCard,
+        textInput, chipContainer, chip, chipSelected, placesHeader, placesContainer, sectionTitle, locationCard,
         locationImage, locationInfo, toursContainer, toursHeader, tourCard, tourInfo, tourImage,
         tourLeader, leaderImage} = styles
 
@@ -74,8 +103,9 @@ const Home = () => {
           </View>
 
           <ScrollView horizontal style={chipContainer}>
-            {tags.map( (item, index) => { return (
-                <Chip key={index} style={chip} textStyle={{fontSize:16}}>
+            {tags.sort(tag => {return (tag === category) ? -1 : 1}).map( (item, index) => { return (
+                <Chip key={index} style={item === category ? chipSelected : chip} 
+                        textStyle={{fontSize:16, color:'white'}}  onPress={() => {handleClickTag(item)}}>
                     {item}
                 </Chip>)
             }
@@ -93,7 +123,7 @@ const Home = () => {
           { loadingLocations ?
             <ActivityIndicator /> :
             (<ScrollView horizontal style={placesContainer}>
-                {locations.map((item, index) => {return (
+                {locationsFiltered.map((item, index) => {return (
                     <Card key={index} style={locationCard}>
                         <Image source={require('../assets/images/splash.jpg')} style={locationImage} />
                         <View style={locationInfo}>
@@ -121,7 +151,7 @@ const Home = () => {
           { loadingTours ?
             <ActivityIndicator /> :
             (<ScrollView horizontal style={placesContainer}>
-                {tours.map((item, index) => {return (
+                {toursFiltered.map((item, index) => {return (
                     <Card key={index} style={tourCard}>
                         <ImageBackground source={require('../assets/images/splash.jpg')} style={tourImage} borderRadius={10}>
                             <View style={tourLeader}>
@@ -208,7 +238,18 @@ const styles = StyleSheet.create({
         height:40,
         borderRadius: 20,
         justifyContent:'center',
-        marginRight:10
+        marginRight:10,
+        backgroundColor:'transparent',
+        borderStyle: 'solid',
+        borderWidth: 2,
+        borderColor: 'white'
+    },
+    chipSelected: {
+        height:40,
+        borderRadius: 20,
+        justifyContent:'center',
+        marginRight:10,
+        backgroundColor:'firebrick'
     },
     placesHeader: {
         marginTop:10,
