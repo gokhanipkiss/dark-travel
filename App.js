@@ -6,6 +6,7 @@ import Login from './components/Login';
 import SplashScreen from './components/SplashScreen';
 import { signal } from '@preact/signals-react';
 import StackMain from './StackMain';
+import db from './fake-db/db';
 
 export const isLoggedIn = signal(false);
 export const currentUser = signal({});

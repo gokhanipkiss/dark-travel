@@ -1,6 +1,5 @@
 
 
-Login page view / hide password
 Signup page
 Forgot password
 

@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomButton from '../custom-components/CustomButton';
-import axios from 'axios';
 import {Checkbox, IconButton} from 'react-native-paper';
 import {currentUser, isLoggedIn} from '../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { mockJsonUrl } from '../utils/Urls';
 
 
@@ -48,7 +48,7 @@ const Login = () => {
     setLoading(true);
     try {
       let response = await axios.get(
-        mockJsonUrl + '/users',
+        '/api/users',
       );
       if (response.data) {
         console.log('Response : %O', response.data);

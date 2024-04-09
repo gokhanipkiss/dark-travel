@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { tags } from '../utils/Tags';
 import { showConnectionAlert } from '../utils/CommonAlerts';
 import axios from 'axios';
-import { mockJsonUrl } from '../utils/Urls';
+
 
 
 
@@ -27,7 +27,7 @@ const Home = () => {
       setLoadingLocations(true);
       try {
         let response = await axios.get(
-          mockJsonUrl + '/places',
+          '/api/places',
         );
         if (response.data) {
           setLocations(response.data)
@@ -42,7 +42,7 @@ const Home = () => {
         setLoadingTours(true);
         try {
           let response = await axios.get(
-            mockJsonUrl + '/tours',
+            '/api/tours',
           );
           if (response.data) {
             setTours(response.data)
