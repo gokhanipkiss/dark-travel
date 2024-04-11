@@ -25,7 +25,7 @@ const Home = () => {
     useEffect(() => {
         //console.log("current user : %O", currentUser.value )
         _getLocations()
-        //_getTours()
+        _getTours()
     }, []);
 
     async function _getLocations () {
