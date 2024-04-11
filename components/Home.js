@@ -7,6 +7,7 @@ import { tags } from '../utils/Tags';
 import { showConnectionAlert } from '../utils/CommonAlerts';
 import axios from 'axios';
 import {currentUser} from '../App';
+import { getLocations, getTours } from '../firebase';
 
 
 const Home = () => {
@@ -22,44 +23,35 @@ const Home = () => {
 
 
     useEffect(() => {
-        getLocations();
-        getTours();
-        console.log("current user : %O", currentUser.value )
+        //console.log("current user : %O", currentUser.value )
+        _getLocations()
+        //_getTours()
     }, []);
 
-    async function getLocations() {
-      setLoadingLocations(true);
-      try {
-        let response = await axios.get(
-          '/api/places',
-        );
-        if (response.data) {
-          setLocations(response.data);
-          handleClickTag(category)
+    async function _getLocations () {
+        let arr = []
+        let result = await getLocations();
+        if (result.docs){
+            result.docs.map(doc => arr.push(doc.data()))
+            setLocations(arr)
+            setLoadingLocations(false)
+            handleClickTag(category)
         }
-      } catch (err) {
-        showConnectionAlert();
-      }
-      setLoadingLocations(false);
     }
 
-    async function getTours() {
-        setLoadingTours(true);
-        try {
-          let response = await axios.get(
-            '/api/tours',
-          );
-          if (response.data) {
-            setTours(response.data)
-          }
-        } catch (err) {
-          showConnectionAlert();
+
+    async function _getTours () {
+        let arr = []
+        let result = await getTours();
+        if (result.docs){
+            result.docs.map(doc => arr.push(doc.data()))
+            setTours(arr)
+            setLoadingTours(false)
+            handleClickTag(category)
         }
-        setLoadingTours(false);
     }
 
     function handleClickTag(title) {
-        console.log(title)
         setCategory(title)
 
         switch (title){

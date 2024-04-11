@@ -50,7 +50,7 @@ const Login = () => {
         '/api/users',
       );
       if (response.data) {
-        console.log('Response : %O', response.data);
+        //console.log('Response : %O', response.data);
         setUsers(response.data);
         checkUserAndPassword(response.data);
       }
