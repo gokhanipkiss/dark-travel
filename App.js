@@ -2,11 +2,10 @@ import React, {useState, useEffect} from 'react';
 import {SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Intro from './components/Intro';
-import Login from './components/Login';
 import SplashScreen from './components/SplashScreen';
 import { signal } from '@preact/signals-react';
 import StackMain from './StackMain';
-import db from './fake-db/db';
+// import db from './fake-db/db';
 
 export const isLoggedIn = signal(false);
 export const currentUser = signal({});
@@ -14,11 +13,11 @@ export const currentUser = signal({});
 function App(){
 
     const [splashTimedOut, setSplashTimedOut] = useState(false);
-    const [firstRun, setFirstRun] = useState(false);
+    const [firstRun, setFirstRun] = useState(false);    
 
     useEffect(()=>{
       showSplash();
-      checkFirstRun()
+      checkFirstRun();
   }, [])
     
     const showSplash = () => {
@@ -56,10 +55,7 @@ function App(){
           :
           (  
             <View style={styles.main}>
-            {
-            !isLoggedIn.value ?
-              <Login />
-              :            
+            {                    
               <StackMain />
             }
             </View>

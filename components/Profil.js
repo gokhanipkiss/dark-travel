@@ -49,7 +49,7 @@ const Profil = ({navigation}) => {
                 <Icon name="chevron-right" color='white' size={26} />
             </TouchableOpacity>            
             <ScrollView horizontal /*showsHorizontalScrollIndicator çalışmadı*/ style={badgesContainer}>
-                {currentUser.value.badges.map((item, index) => {
+                {[].map((item, index) => {
                     return (
                     <Image key={index} style={badge} source={require('../assets/images/splash.jpg')} />
                     )
@@ -79,7 +79,7 @@ const Profil = ({navigation}) => {
                 </Text>
                 <Icon name="chevron-right" color='white' size={26} />
             </TouchableOpacity>
-            {currentUser.value.memories.map((item, index) => {
+            {[].map((item, index) => {
                 return(
                 <TouchableOpacity key={index} style={memoriesCard}>
                     <Image style={memoriesImage} source={require('../assets/images/splash.jpg')} />

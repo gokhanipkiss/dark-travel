@@ -8,13 +8,12 @@ import {
   ActivityIndicator,
   Alert
 } from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomButton from '../custom-components/CustomButton';
 import {Checkbox, IconButton} from 'react-native-paper';
 import {currentUser, isLoggedIn} from '../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
 const errorMessages= {
     emailErrorTitle: "Bu e-posta ile herhangi bir kayıt bulunmadı",
@@ -22,7 +21,7 @@ const errorMessages= {
     connectionErrorTitle: "Bağlantı hatası"
 }
 
-const Login = () => {
+const Login = ({navigation}) => {
   //TODO: Let's use useForm hook instead
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,25 +39,21 @@ const Login = () => {
   }
 
   useEffect(() => {
-    getStorage();
+    getStorage();    
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        isLoggedIn.value = true;
+        currentUser.value = user;
+        navigation.push('TabMain')
+      } else {
+        isLoggedIn.value = false;
+      }
+    });
   }, []);
 
-  const getUsers = async () => {
-    setLoading(true);
-    try {
-      let response = await axios.get(
-        '/api/users',
-      );
-      if (response.data) {
-        //console.log('Response : %O', response.data);
-        setUsers(response.data);
-        checkUserAndPassword(response.data);
-      }
-    } catch (err) {
-      showAlert('connection');
-    }
-    setLoading(false);
-  };
+  const handleSignUp = () => {
+    navigation.push('SignUp')
+  }
 
   const onChangeEmail = value => {
     setEmail(value);
@@ -67,9 +62,7 @@ const Login = () => {
   const onChangePassword = value => {
     setPassword(value);
   };
-
-  //TODO: "Show Password" button
-
+  
   const onChangeRemember = () => {
     let oldValue = !!remember;
     setRemember(!oldValue);
@@ -79,27 +72,24 @@ const Login = () => {
     setShowPassword(!showPassword)
   }
 
-  function checkUserAndPassword(usersData) {
-    let users_ = usersData || users;
-    let user = users_.find(i => i.email === email);
-    if (user) {        
-        if (user.password === password){
-          isLoggedIn.value = true;
-          currentUser.value = user
-        } 
-        else showAlert('password')
-        
-    } else showAlert('email')
+
+  const signIn = (email, password) => {
+    signInWithEmailAndPassword(auth, email, password).then(
+        (result) => {
+            // console.log("Logged In")
+        }
+    ).catch(err => {
+        if (err.toString().includes("invalid-credential"))
+            Alert.alert("Hata", "Kullanıcı adı veya şifre hatalı.")
+        else if (err.toString().includes("invalid"))
+            Alert.alert("Hata", "E-posta adres biçimi geçersiz.")
+        else
+            console.log(err)
+    })
   }
 
-  const handleSubmit = async () => {
-    if (users.length === 0) {
-      // if fetched once, no need to fetch again
-      getUsers();
-    } else {
-      checkUserAndPassword();
-    }
-    await AsyncStorage.setItem('email', remember ? email : '');
+  const handleSubmit = () => {
+    signIn(email, password);
   };
 
   function showAlert(type) {
@@ -164,7 +154,7 @@ const Login = () => {
           />
         )}
 
-        <Text style={styles.infoText}>Kaydolmak için tıklayın</Text>
+        <Text style={styles.infoText} onPress={handleSignUp}>Kaydolmak için tıklayın</Text>
       </View>
     </View>
   );

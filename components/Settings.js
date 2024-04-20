@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { Card, Switch } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { isLoggedIn } from '../App';
+import { currentUser, isLoggedIn } from '../App';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 
-const Settings = () => {
+const Settings = ({navigation}) => {
+
+    useEffect(() => {
+      
+    }, []);
 
     const settingsList = [
         {
@@ -45,6 +51,9 @@ const Settings = () => {
 
     function handleExit() {
         isLoggedIn.value = false;
+        currentUser.value = {};
+        signOut(auth) // .then(navigation.push('Login'));  yerine onAuthStateChanged kullandım
+
     }
    
 

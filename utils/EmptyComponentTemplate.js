@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Image } from 'react-native-safe-area-context';
+import { SafeAreaView, View, Text, StyleSheet, Image } from 'react-native';
 
 
 const Template = () => {
