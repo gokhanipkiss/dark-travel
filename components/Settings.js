@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { Card, Switch } from 'react-native-paper';
@@ -8,10 +8,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 
 const Settings = ({navigation}) => {
-
-    useEffect(() => {
-      
-    }, []);
+  
 
     const settingsList = [
         {

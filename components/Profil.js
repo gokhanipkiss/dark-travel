@@ -36,7 +36,7 @@ const Profil = ({navigation}) => {
           <View style={userInfoCard}>
             <Image style={avatarImage} source={require('../assets/images/splash.jpg')} />
             <View style={userInfo}>
-                <Text style={usernameText} > {currentUser.value.name}  </Text>
+                <Text style={usernameText} > {currentUser.value.displayName}  </Text>
                 <Text style={text}> {personaMap[currentUser.value.persona]} </Text>
                 <Text style={{...text, fontSize:16}}> {currentUser.value.friendCount} arkadaş </Text>
             </View>                        

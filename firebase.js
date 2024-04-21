@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { collection, getFirestore, getDocs } from 'firebase/firestore' 
-import { initializeAuth, getReactNativePersistence, signOut } from "firebase/auth";
+import { initializeAuth, getReactNativePersistence, getAuth } from "firebase/auth";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -25,8 +25,20 @@ const db = getFirestore()
 const placesRef = collection(db, 'places')
 const toursRef = collection(db, 'tours')
 
+
 // get collection data
 export const getLocations = () => {
+    // const _auth = getAuth();
+    // const user = _auth.currentUser;
+    // if (user !== null) {
+    //     user.providerData.forEach((profile) => {
+    //       console.log("Sign-in provider: " + profile.providerId);
+    //       console.log("  Provider-specific UID: " + profile.uid);
+    //       console.log("  Name: " + profile.displayName);
+    //       console.log("  Email: " + profile.email);
+    //       console.log("  Photo URL: " + profile.photoURL);
+    //     });
+    //   }
     return getDocs(placesRef)
 }
 

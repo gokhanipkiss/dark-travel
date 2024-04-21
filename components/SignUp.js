@@ -3,13 +3,14 @@ import {View, Text, StyleSheet, Image, Alert, TextInput, Button, ActivityIndicat
 import CustomButton from '../custom-components/CustomButton';
 import {IconButton} from 'react-native-paper';
 import { auth } from '../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 
 const SignUp = ({navigation}) => {
    
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword ] = useState(false);
 
@@ -19,7 +20,11 @@ const SignUp = ({navigation}) => {
 
   const onChangePassword = value => {
     setPassword(value);
-  };  
+  };
+  
+  const onChangeName = value => {
+    setName(value);
+  };
 
   function toggleShowPassword () {
     setShowPassword(!showPassword)
@@ -27,14 +32,22 @@ const SignUp = ({navigation}) => {
 
   const handleSubmit = () => {
     setLoading(true);
-    signUp(email, password)
+    if ( name.replace(/\s/g,"") == "" ){
+      Alert.alert('Hata', 'İsim boş olamaz.')
+      setLoading(false)
+    }
+    else
+      signUp(email, password, name)
   };
 
-  const signUp = (email, password) => {
+  const signUp = (email, password, name) => {
     createUserWithEmailAndPassword(auth, email, password).then(
         (credentials) => {
+            updateProfile(auth.currentUser, {
+              displayName: name
+            })            
             console.log(credentials.user)
-            Alert.alert("Başarı", "Kullanıcı başarıyla kaydedildi.", signUpSuccessButton)
+            Alert.alert("Başarı", "Kullanıcı başarıyla kaydedildi." /* , signUpSuccessButton */ )
         }
     ).catch(err => {
         if (err.toString().includes("weak-password"))
@@ -51,13 +64,13 @@ const SignUp = ({navigation}) => {
     )
   }
 
-  const signUpSuccessButton =
-    [
-      {
-        text: 'Devam',
-        onPress: () => navigation.push('Login'),
-      },
-  ]
+  // const signUpSuccessButton =
+  //   [
+  //     {
+  //       text: 'Devam',
+  //       onPress: () => navigation.push('Login'),
+  //     },
+  // ]
 
     return (
         <View style={styles.main}>
@@ -70,6 +83,12 @@ const SignUp = ({navigation}) => {
             onChangeText={onChangeEmail}
             placeholder="E-posta"
             value={email}
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangeName}
+            placeholder="İsim"
+            value={name}
           />
           <View style={[styles.input, {flexDirection: 'row', justifyContent:'space-between', alignItems:'center'} ]}>
             <TextInput

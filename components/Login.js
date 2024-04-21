@@ -21,7 +21,7 @@ const errorMessages= {
     connectionErrorTitle: "Bağlantı hatası"
 }
 
-const Login = ({navigation}) => {
+const Login = ({navigation, route}) => {
   //TODO: Let's use useForm hook instead
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,8 +47,11 @@ const Login = ({navigation}) => {
         navigation.push('TabMain')
       } else {
         isLoggedIn.value = false;
+        if (route.name !== 'Login') // Bu check gerekli, yoksa ilk login'de kilitleniyor
+          navigation.replace('Login')
       }
     });
+    console.log("ROUTE: %O" , route)
   }, []);
 
   const handleSignUp = () => {
