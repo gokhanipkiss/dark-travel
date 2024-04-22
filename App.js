@@ -23,7 +23,7 @@ function App(){
     const showSplash = () => {
       setTimeout(
         ()=>{setSplashTimedOut(true)},
-        3000
+        1000
       )
     }
     const checkFirstRun = async () => {        
@@ -32,7 +32,7 @@ function App(){
               if (result === undefined || result === null){
                 setFirstRun(true)
                 const res = await AsyncStorage.setItem('previouslyLaunched', 'previouslyLaunched', ()=>{
-                  console.log("previouslyLaunched set")
+                  // console.log("previouslyLaunched set")
                 });
               }
             } catch(e) {

@@ -2,8 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, Alert, TextInput, Button, ActivityIndicator} from 'react-native';
 import CustomButton from '../custom-components/CustomButton';
 import {IconButton} from 'react-native-paper';
-import { auth } from '../firebase';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { signUp } from '../firebase';
 
 
 const SignUp = ({navigation}) => {
@@ -11,6 +10,7 @@ const SignUp = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [city, setCity] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword ] = useState(false);
 
@@ -26,43 +26,30 @@ const SignUp = ({navigation}) => {
     setName(value);
   };
 
+  const onChangeCity = value => {
+    setCity(value)
+  }
+
   function toggleShowPassword () {
     setShowPassword(!showPassword)
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true);
     if ( name.replace(/\s/g,"") == "" ){
       Alert.alert('Hata', 'İsim boş olamaz.')
       setLoading(false)
     }
-    else
-      signUp(email, password, name)
-  };
-
-  const signUp = (email, password, name) => {
-    createUserWithEmailAndPassword(auth, email, password).then(
-        (credentials) => {
-            updateProfile(auth.currentUser, {
-              displayName: name
-            })            
-            console.log(credentials.user)
-            Alert.alert("Başarı", "Kullanıcı başarıyla kaydedildi." /* , signUpSuccessButton */ )
-        }
-    ).catch(err => {
-        if (err.toString().includes("weak-password"))
-            Alert.alert("Hata", "Şifre yeterince güçlü değil.")
-        else if (err.toString().includes("already-in-use"))
-            Alert.alert("Hata", "Kullanıcı zaten mevcut.")
-        else if (err.toString().includes("invalid"))
-            Alert.alert("Hata", "E-posta adres biçimi geçersiz.")
-        else
-            console.log(err)
-        }
-    ).finally(
+    else if ( city.replace(/\s/g,"") == "" ){
+      Alert.alert('Hata', 'Şehir boş olamaz.')
       setLoading(false)
-    )
-  }
+    }
+    else{
+      let result = await signUp(email, password, name, city);
+      if (result)
+        setLoading(false)
+    }
+  };  
 
   // const signUpSuccessButton =
   //   [
@@ -80,15 +67,21 @@ const SignUp = ({navigation}) => {
         <View>
           <TextInput
             style={styles.input}
-            onChangeText={onChangeEmail}
-            placeholder="E-posta"
-            value={email}
-          />
-          <TextInput
-            style={styles.input}
             onChangeText={onChangeName}
             placeholder="İsim"
             value={name}
+          />
+           <TextInput
+            style={styles.input}
+            onChangeText={onChangeCity}
+            placeholder="Şehir"
+            value={city}
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangeEmail}
+            placeholder="E-posta"
+            value={email}
           />
           <View style={[styles.input, {flexDirection: 'row', justifyContent:'space-between', alignItems:'center'} ]}>
             <TextInput
@@ -122,7 +115,7 @@ const SignUp = ({navigation}) => {
 const styles = StyleSheet.create({
     main: {
       flex: 1,
-      justifyContent: 'space-around',
+      justifyContent: 'space-evenly',
       alignItems: 'center',
       backgroundColor: 'black',
       color: 'white',
@@ -140,18 +133,9 @@ const styles = StyleSheet.create({
       fontSize: 30,
       color: 'white',
     },
-    infoText: {
-      color: 'white',
-      fontSize: 15,
-    },
-    remember: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: -20,
-      marginBottom: 30,
-    },
     submitButton: {
       marginBottom: 10,
+      marginTop: 30
     },
   });
 

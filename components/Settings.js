@@ -13,7 +13,8 @@ const Settings = ({navigation}) => {
     const settingsList = [
         {
             name : 'Profil Bilgileri',
-            icon: 'circle-user'
+            icon: 'circle-user',
+            onPress: () => {navigation.push('Profil Bilgileri')}
         },
         {
             name: 'Karakter Değişimi',

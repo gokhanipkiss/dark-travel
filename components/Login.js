@@ -12,14 +12,9 @@ import CustomButton from '../custom-components/CustomButton';
 import {Checkbox, IconButton} from 'react-native-paper';
 import {currentUser, isLoggedIn} from '../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { auth } from '../firebase';
-import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { auth, signIn } from '../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
-const errorMessages= {
-    emailErrorTitle: "Bu e-posta ile herhangi bir kayıt bulunmadı",
-    passwordErrorTitle: "Hatalı şifre",
-    connectionErrorTitle: "Bağlantı hatası"
-}
 
 const Login = ({navigation, route}) => {
   //TODO: Let's use useForm hook instead
@@ -51,7 +46,7 @@ const Login = ({navigation, route}) => {
           navigation.replace('Login')
       }
     });
-    console.log("ROUTE: %O" , route)
+    //console.log("ROUTE: %O" , route)
   }, []);
 
   const handleSignUp = () => {
@@ -73,46 +68,11 @@ const Login = ({navigation, route}) => {
 
   function toggleShowPassword () {
     setShowPassword(!showPassword)
-  }
-
-
-  const signIn = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password).then(
-        (result) => {
-            // console.log("Logged In")
-        }
-    ).catch(err => {
-        if (err.toString().includes("invalid-credential"))
-            Alert.alert("Hata", "Kullanıcı adı veya şifre hatalı.")
-        else if (err.toString().includes("invalid"))
-            Alert.alert("Hata", "E-posta adres biçimi geçersiz.")
-        else
-            console.log(err)
-    })
-  }
+  }  
 
   const handleSubmit = () => {
     signIn(email, password);
-  };
-
-  function showAlert(type) {
-    console.log(type)
-    const {emailErrorTitle, passwordErrorTitle, connectionErrorTitle} = errorMessages;
-     Alert.alert(
-        type === 'email' ? emailErrorTitle : (type === 'password' ? passwordErrorTitle : connectionErrorTitle),
-        "",
-        [
-            {
-                text: 'Tamam',
-                onPress: () => {}
-            }
-        ],
-        {
-            cancelable: true,
-            onDismiss: () => {}
-        }
-     )
-  }
+  };  
  
   return (
     <View style={styles.main}>

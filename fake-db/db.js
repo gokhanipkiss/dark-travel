@@ -16,7 +16,7 @@ const db =
         sex: "M",
         email: "h.atakan@gmail.com",
         password: "Abcd.3456",
-        location: "Ankara, Türkiye",
+        location: "İstanbul, Türkiye",
         persona: "myst",
         badges: ["badge2", "badge3"],
         friendCount: 12,
@@ -30,7 +30,7 @@ const db =
         email: "ahmety@gmail.com",
         password: "5432A.bc",
         location: "Konya, Türkiye",
-        persona:"adv",
+        persona:"hist",
         badges: ["badge1", "badge2", "badge3"],
         friendCount: 5,
         memories: ["Anı 1", "Anı 2", "Anı 3"]
@@ -42,10 +42,10 @@ const db =
         sex: "F",
         email: "esinsahin83@hotmail.com",
         password: "3344abcd",
-        location: "İstanbul, Türkiye",
-        persona:"hist",
+        location: "Ankara, Türkiye",
+        persona:"adv",
         badges:["badge1"],
-        friendCount: 21,
+        friendCount: 0,
         memories: ["Anı 1"]
       }
     ],

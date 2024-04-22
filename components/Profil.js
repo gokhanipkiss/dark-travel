@@ -1,12 +1,9 @@
-import { StackActions } from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import { Text, StyleSheet, View, SafeAreaView, Image, Touchable, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { currentUser } from '../App';
 import { personaMap } from '../utils/ShortNameMaps';
 import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
-import { Card } from 'react-native-paper';
-
 
 
 const Profil = ({navigation}) => {
@@ -38,7 +35,7 @@ const Profil = ({navigation}) => {
             <View style={userInfo}>
                 <Text style={usernameText} > {currentUser.value.displayName}  </Text>
                 <Text style={text}> {personaMap[currentUser.value.persona]} </Text>
-                <Text style={{...text, fontSize:16}}> {currentUser.value.friendCount} arkadaş </Text>
+                <Text style={{...text, fontSize:16}}> {currentUser.value.friendCount || 0} arkadaş </Text>
             </View>                        
           </View>
           <View style={badgesSection} >
