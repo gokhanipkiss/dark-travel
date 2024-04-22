@@ -92,7 +92,7 @@ const SignUp = ({navigation}) => {
               textContentType="password"
               secureTextEntry={!showPassword}
             />
-            <IconButton icon={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color={'black'} onPress={toggleShowPassword} />          
+            <IconButton icon={showPassword ? "eye-off-outline" : "eye-outline"} size={24} iconColor='gray' onPress={toggleShowPassword} />          
           </View>
           
           {loading ? (
