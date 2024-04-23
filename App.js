@@ -7,8 +7,9 @@ import { signal } from '@preact/signals-react';
 import StackMain from './StackMain';
 // import db from './fake-db/db';
 
-export const isLoggedIn = signal(false);
-export const currentUser = signal({});
+
+export const userAddnlInfo = signal({});
+export const isLoggedIn = signal(false)
 
 function App(){
 

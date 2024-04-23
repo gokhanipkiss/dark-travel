@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { Card, Switch } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { currentUser, isLoggedIn } from '../App';
+import { userAddnlInfo } from '../App';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 
@@ -48,10 +48,7 @@ const Settings = ({navigation}) => {
     ]
 
     function handleExit() {
-        isLoggedIn.value = false;
-        currentUser.value = {};
         signOut(auth) // .then(navigation.push('Login'));  yerine onAuthStateChanged kullandım
-
     }
    
 

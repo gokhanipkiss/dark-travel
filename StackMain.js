@@ -5,13 +5,13 @@ import Settings from './components/Settings';
 import TabMain from './TabMain';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
-import { isLoggedIn } from './App';
 import UserInfo from './components/UserInfo';
+import { isLoggedIn } from './App';
 
 
-const StackMain = () => {   
-
-    const Stack = createStackNavigator();    
+const StackMain = () => {
+    
+    const Stack = createStackNavigator();
     
     return (
       <NavigationContainer>        

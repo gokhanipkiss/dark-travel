@@ -2,18 +2,11 @@ import React, {useState, useEffect} from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Image } from 'react-native';
 import { auth, getUser } from '../firebase';
 import { IconButton } from 'react-native-paper';
+import { userAddnlInfo } from '../App';
 
 
-const UserInfo = () => {
+const UserInfo = () => {       
 
-    const [userData, setUserData] = useState({});
-
-    useEffect(() => {       
-        getUser(auth.currentUser.uid).then(
-            result => setUserData(result)
-        ).catch(err => console.log(err));
-    }, []);
-       
 
     return (
        <SafeAreaView style={styles.main}>
@@ -33,7 +26,7 @@ const UserInfo = () => {
                     Şehir:
                 </Text>
                 <Text style={styles.text}>
-                    {userData.location || ''}
+                    {userAddnlInfo.value.location || ''}
                 </Text>
                 <Text style={styles.pencil}>
                     <IconButton  icon='pencil' size={26} iconColor='white' onPress={()=>{console.log("pressed")}} />
@@ -44,7 +37,7 @@ const UserInfo = () => {
                     Yaş:
                 </Text>
                 <Text style={styles.text}>
-                    {userData.age || ''}
+                    {userAddnlInfo.value.age || ''}
                 </Text>
                 <Text style={styles.pencil}>
                     <IconButton  icon='pencil' size={26} iconColor='white' onPress={()=>{console.log("pressed")}} />
@@ -55,7 +48,7 @@ const UserInfo = () => {
                     Cinsiyet:
                 </Text>
                 <Text style={styles.text}>
-                    {userData.sex || ''}
+                    {userAddnlInfo.value.sex || ''}
                 </Text>
                 <Text style={styles.pencil}>
                     <IconButton  icon='pencil' size={26} iconColor='white' onPress={()=>{console.log("pressed")}} />

@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react';
 import { Text, StyleSheet, View, SafeAreaView, Image, Touchable, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { currentUser } from '../App';
+import { userAddnlInfo } from '../App';
 import { personaMap } from '../utils/ShortNameMaps';
 import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
+import { auth } from '../firebase';
 
 
 const Profil = ({navigation}) => {
@@ -33,9 +34,9 @@ const Profil = ({navigation}) => {
           <View style={userInfoCard}>
             <Image style={avatarImage} source={require('../assets/images/splash.jpg')} />
             <View style={userInfo}>
-                <Text style={usernameText} > {currentUser.value.displayName}  </Text>
-                <Text style={text}> {personaMap[currentUser.value.persona]} </Text>
-                <Text style={{...text, fontSize:16}}> {currentUser.value.friendCount || 0} arkadaş </Text>
+                <Text style={usernameText} > {auth.currentUser.displayName}  </Text>
+                <Text style={text}> {personaMap[userAddnlInfo.value.persona]} </Text>
+                <Text style={{...text, fontSize:16}}> {userAddnlInfo.value.friendCount || 0} arkadaş </Text>
             </View>                        
           </View>
           <View style={badgesSection} >

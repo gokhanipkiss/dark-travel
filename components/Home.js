@@ -4,10 +4,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator, Card, Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { tags } from '../utils/Tags';
-import { showConnectionAlert } from '../utils/CommonAlerts';
 import axios from 'axios';
 import {currentUser} from '../App';
-import { getLocations, getTours } from '../firebase';
+import { getLocations, getTours, getUser } from '../firebase';
 
 
 const Home = () => {
@@ -24,8 +23,9 @@ const Home = () => {
 
     useEffect(() => {
         //console.log("current user : %O", currentUser.value )
+        
         _getLocations()
-        _getTours()
+        _getTours()        
     }, []);
 
     async function _getLocations () {

@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import CustomButton from '../custom-components/CustomButton';
 import {Checkbox, IconButton} from 'react-native-paper';
-import {currentUser, isLoggedIn} from '../App';
+import {isLoggedIn, userAddnlInfo} from '../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { auth, signIn } from '../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { auth, getUser, signIn } from '../firebase';
+import { onAuthStateChanged, updateProfile } from 'firebase/auth';
 
 
 const Login = ({navigation, route}) => {
@@ -38,7 +38,10 @@ const Login = ({navigation, route}) => {
     onAuthStateChanged(auth, user => {
       if (user) {
         isLoggedIn.value = true;
-        currentUser.value = user;
+        getUser(auth.currentUser.uid).then(
+            result => {userAddnlInfo.value = result}
+        ).catch(err => console.log(err));
+       
         navigation.push('TabMain')
       } else {
         isLoggedIn.value = false;
@@ -126,7 +129,7 @@ const Login = ({navigation, route}) => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     backgroundColor: 'black',
     color: 'white',
