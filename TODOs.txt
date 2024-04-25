@@ -1,7 +1,5 @@
-
-
-Signup page
 Forgot password
+Change password
 
 Home page background image, üst tuşlar
 Tekrar eden başlıklar için Custom component

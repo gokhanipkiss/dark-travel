@@ -5,7 +5,7 @@ import { ActivityIndicator, Card, Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { tags } from '../utils/Tags';
 import axios from 'axios';
-import {currentUser} from '../App';
+import {userAddnlInfo} from '../App';
 import { getLocations, getTours, getUser } from '../firebase';
 
 
@@ -22,7 +22,7 @@ const Home = () => {
 
 
     useEffect(() => {
-        //console.log("current user : %O", currentUser.value )
+        console.log("user info : %O", userAddnlInfo.value )
         
         _getLocations()
         _getTours()        
@@ -64,8 +64,8 @@ const Home = () => {
                 setToursFiltered(tours.filter(tour => tour.categories.includes("myst")))
                 break;
             case "Bana Yakın":
-                setLocationsFiltered(locations.filter(loc => loc.location === currentUser.value.location))
-                setToursFiltered(tours.filter(tour => tour.location === currentUser.value.location))
+                setLocationsFiltered(locations.filter(loc => loc.location === userAddnlInfo.value.location))
+                setToursFiltered(tours.filter(tour => tour.location === userAddnlInfo.value.location))
                 break;
             case "Güncel":
                 setLocationsFiltered(locations)
