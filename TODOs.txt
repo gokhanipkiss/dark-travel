@@ -3,4 +3,4 @@ Change password
 
 Home page background image, üst tuşlar
 Tekrar eden başlıklar için Custom component
-Home search bar ve tag'ler işlevleri
+Home search bar işlevi

@@ -22,8 +22,7 @@ const Home = () => {
 
 
     useEffect(() => {
-        console.log("user info : %O", userAddnlInfo.value )
-        
+               
         _getLocations()
         _getTours()        
     }, []);
