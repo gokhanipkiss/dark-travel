@@ -7,6 +7,7 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import UserInfo from './components/UserInfo';
 import { isLoggedIn } from './App';
+import Account from './components/Account';
 
 
 const StackMain = () => {
@@ -40,6 +41,10 @@ const StackMain = () => {
               <Stack.Screen
                 name="Profil Bilgileri"
                 component={UserInfo}                
+              />
+              <Stack.Screen
+                name="Hesap ve Güvenlik"
+                component={Account}
               />
             </>
           

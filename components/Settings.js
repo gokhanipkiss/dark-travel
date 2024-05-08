@@ -22,7 +22,8 @@ const Settings = ({navigation}) => {
         },
         {
             name: 'Hesap & Güvenlik',
-            icon: 'user-shield'
+            icon: 'user-shield',
+            onPress: () => {navigation.push('Hesap ve Güvenlik')}
         },
         {
             name: 'Destek',

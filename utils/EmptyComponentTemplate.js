@@ -1,22 +1,30 @@
 import React, {useState, useEffect} from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
 
 
 const Template = () => {
 
     return (
-       <SafeAreaView>
-            <View>
-                <Text>
+       
+        <View style={styles.main}>
+            <Text style={styles.text}>
 
-                </Text>
-            </View>
-        </SafeAreaView>
+            </Text>
+        </View>
+
     );
 }
 
 const styles = StyleSheet.create({
-    
+    main: {
+        flex: 1,
+        backgroundColor: 'black',
+        paddingHorizontal: 15,
+        paddingTop:15
+      },
+    text: {
+        color:'white'
+    },
 })
 
 export default Template;
