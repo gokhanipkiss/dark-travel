@@ -24,6 +24,11 @@ const Account = () => {
       setPassword2(value)
   }
 
+  function clearFields () {
+    setPassword('');
+    setPassword2('')
+  }
+
     function handleSubmit() {
       if (password !== password2) {
         Alert.alert('Hata', 'Girilen şifreler birbirinden farklı.')
@@ -31,7 +36,8 @@ const Account = () => {
       else {
       updatePassword(auth.currentUser, password).then(()=>{
         Alert.alert('Başarı', 'Parolanız başarıyla değiştirildi.')
-        toggleModal(false)
+        toggleModal(false);
+        clearFields()
       }
       ).catch(err => {
         if (err.toString().includes('recent'))
