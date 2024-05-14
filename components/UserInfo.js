@@ -20,7 +20,7 @@ const UserInfo = ({navigation}) => {
                 {props.heading}:
             </Text>
             <Text style={styles.text}>
-                {props.type === 'name' ? auth.currentUser.displayName : (userAddnlInfo.value[props.type] || '')}
+                {props.type === 'name' ? auth.currentUser.displayName : (userAddnlInfo ? userAddnlInfo.value[props.type] : '')}
             </Text>
             <Text style={styles.pencil}>
                 <IconButton  icon='pencil' size={26} iconColor='white' onPress={()=>{handleOpenEdit(props.type)}} />

@@ -30,11 +30,15 @@ const usersRef = collection(db, 'users')
 
 // get collection data
 export const getLocations = () => {   
-    return getDocs(placesRef)
+    return getDocs(placesRef).catch(
+        err => console.log(err.toString())
+    )
 }
 
 export const getTours = () => {
-    return getDocs(toursRef)
+    return getDocs(toursRef).catch(
+        err => console.log(err.toString())
+    )
 }
 
 

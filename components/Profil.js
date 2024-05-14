@@ -35,8 +35,8 @@ const Profil = ({navigation}) => {
             <Image style={avatarImage} source={require('../assets/images/splash.jpg')} />
             <View style={userInfo}>
                 <Text style={usernameText} > {auth.currentUser.displayName}  </Text>
-                <Text style={text}> {personaMap[userAddnlInfo.value.persona]} </Text>
-                <Text style={{...text, fontSize:16}}> {userAddnlInfo.value.friendCount || 0} arkadaş </Text>
+                <Text style={text}> {userAddnlInfo ? personaMap[userAddnlInfo.value.persona] : ''} </Text>
+                <Text style={{...text, fontSize:16}}> {userAddnlInfo ? userAddnlInfo.value.friendCount : 0} arkadaş </Text>
             </View>                        
           </View>
           <View style={badgesSection} >
