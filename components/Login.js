@@ -10,10 +10,8 @@ import {
 } from 'react-native';
 import CustomButton from '../custom-components/CustomButton';
 import {Checkbox, IconButton} from 'react-native-paper';
-import {isLoggedIn, userAddnlInfo} from '../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth, getUser, signIn } from '../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
 
 
 const Login = ({navigation, route}) => {
@@ -34,24 +32,7 @@ const Login = ({navigation, route}) => {
   }
 
   useEffect(() => {
-    getStorage();    
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        isLoggedIn.value = true;
-        getUser(auth.currentUser.uid).then(
-            result => {userAddnlInfo.value = result
-              console.log("userInfo: %O", result)
-            }            
-        ).catch(err => console.log(err));
-        navigation.push('TabMain')
-        console.log("AUTH STATE CHANGED")
-      } else {
-        isLoggedIn.value = false;
-        if (route.name !== 'Login') // Bu check gerekli, yoksa ilk login'de kilitleniyor
-          navigation.replace('Login')
-      }
-    });
-    //console.log("ROUTE: %O" , route)
+    getStorage();
   }, []);
 
   const handleSignUp = () => {

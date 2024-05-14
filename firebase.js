@@ -45,7 +45,7 @@ export const auth = initializeAuth(app, {
 
 
 export const signUp = (email, password, name, city) => {
-    createUserWithEmailAndPassword(auth, email, password).then(
+    return createUserWithEmailAndPassword(auth, email, password).then(
             (credentials) => {
              updateProfile(auth.currentUser, {
               displayName: name
@@ -66,9 +66,6 @@ export const signUp = (email, password, name, city) => {
         else
             console.log(err)
         }
-    ).finally( () => {
-        return true
-    }
     )
   }
 

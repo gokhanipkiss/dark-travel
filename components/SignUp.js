@@ -34,7 +34,11 @@ const SignUp = ({navigation}) => {
     setShowPassword(!showPassword)
   }
 
-  const handleSubmit = async () => {
+  function clearFields() {
+    setEmail(''); setPassword(''); setName(''); setCity('');     
+  }
+
+  const handleSubmit = () => {
     setLoading(true);
     if ( name.replace(/\s/g,"") == "" ){
       Alert.alert('Hata', 'İsim boş olamaz.')
@@ -44,10 +48,14 @@ const SignUp = ({navigation}) => {
       Alert.alert('Hata', 'Şehir boş olamaz.')
       setLoading(false)
     }
-    else{
-      let result = await signUp(email, password, name, city);
-      if (result)
+    else{   
+      signUp(email, password, name, city).then(()=> {   // Bu yapıyı ilk defa kullandım, öbür tarafta tanımladığım promise'in burada then'ine ekleme yapabiliyorum
+        clearFields();
+        console.log("then2")
+      })
+      .finally(
         setLoading(false)
+      )
     }
   };  
 

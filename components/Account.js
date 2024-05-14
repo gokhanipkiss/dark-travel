@@ -42,6 +42,8 @@ const Account = () => {
       ).catch(err => {
         if (err.toString().includes('recent'))
           Alert.alert('Hata', 'Şifre değişimi için yakın zamanda giriş yapılmış olması gerekir.')
+        else
+          console.log(err)
     })
     }
     }
