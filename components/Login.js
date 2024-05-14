@@ -6,12 +6,13 @@ import {
   TextInput,
   Button,
   ActivityIndicator,
-  Alert
+  Alert, Dimensions
 } from 'react-native';
 import CustomButton from '../custom-components/CustomButton';
-import {Checkbox, IconButton} from 'react-native-paper';
+import {Checkbox, IconButton, Modal, PaperProvider, Portal} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth, getUser, signIn } from '../firebase';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 
 const Login = ({navigation, route}) => {
@@ -22,6 +23,9 @@ const Login = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
   const [remember, setRemember] = useState(false);
   const [showPassword, setShowPassword ] = useState(false);
+
+  const [forgotModalOpen, setForgotModalOpen ] = useState(false);
+  const [emailToSend, setEmailToSend ] = useState('');
 
   async function getStorage() {
     const result = await AsyncStorage.getItem('email');
@@ -54,58 +58,115 @@ const Login = ({navigation, route}) => {
 
   function toggleShowPassword () {
     setShowPassword(!showPassword)
-  }  
+  } 
+  
+  function handleResetPassword () {   
+    sendPasswordResetEmail(auth, emailToSend)
+      .then(() => {
+        Alert.alert('Başarı','Şifre yenileme talimatı e-posta adresinize gönderildi.')
+        setEmailToSend('')
+      })
+      .catch((error) => {
+        Alert.alert('Hata', error.toString())
+      });
+  }
 
   const handleSubmit = () => {
     signIn(email, password);
   };  
  
   return (
-    <View style={styles.main}>
-      <View style={styles.header}>
-        <Text style={styles.titleText}>Giriş</Text>
-      </View>
-      <View>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeEmail}
-          placeholder="E-posta"
-          value={email}
-        />
-        <View style={[styles.input, {flexDirection: 'row', justifyContent:'space-between', alignItems:'center'} ]}>
+    <PaperProvider>
+      <View style={styles.main}>
+        <View style={styles.header}>
+          <Text style={styles.titleText}>Giriş</Text>
+        </View>
+        <View>
           <TextInput
-            style={{fontSize:20, width:150}}
-            onChangeText={onChangePassword}
-            placeholder="Şifre"
-            value={password}
-            textContentType="password"
-            secureTextEntry={!showPassword}
+            style={styles.input}
+            onChangeText={onChangeEmail}
+            placeholder="E-posta"
+            value={email}
           />
-          <IconButton icon={showPassword ? "eye-off-outline" : "eye-outline"} size={24} iconColor={'gray'} onPress={toggleShowPassword} />          
-        </View>
-        <View style={styles.remember}>
-          <Checkbox
-            color="white"
-            status={remember ? 'checked' : 'unchecked'}
-            onPress={onChangeRemember}
-          />
-          <Text style={styles.infoText}>Beni hatırla</Text>
-        </View>
-        {loading ? (
-          <ActivityIndicator />
-        ) : (
-          <CustomButton
-            title="Giriş Yap"
-            onPress={handleSubmit}
-            fontSize={20}
-            backgroundColor={'slategray'}
-            style={styles.submitButton}
-          />
-        )}
+          <View
+            style={[
+              styles.input,
+              {
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              },
+            ]}>
+            <TextInput
+              style={{fontSize: 20, width: '85%', color:'white'}}
+              onChangeText={onChangePassword}
+              placeholder="Şifre"
+              value={password}
+              textContentType="password"
+              secureTextEntry={!showPassword}
+            />
+            <IconButton
+              icon={showPassword ? 'eye-off-outline' : 'eye-outline'}
+              size={24}
+              iconColor={'gray'}
+              onPress={toggleShowPassword}
+            />
+          </View>
+          <View style={styles.remember}>
+            <Checkbox
+              color="white"
+              status={remember ? 'checked' : 'unchecked'}
+              onPress={onChangeRemember}
+            />
+            <View style={{flex:1, flexDirection:'row', justifyContent:'space-between'}}>
+              <View >
+                <Text style={styles.infoText}> Beni hatırla </Text>
+              </View>
+              <View >
+                <Text style={[styles.infoText, {textDecorationLine: 'underline'}]} onPress={()=>{setForgotModalOpen(true)}}> Şifremi unuttum </Text>
+              </View>
+            </View>
+          </View>
+          {loading ? (
+            <ActivityIndicator />
+          ) : (
+            <CustomButton
+              title="Giriş Yap"
+              onPress={handleSubmit}
+              fontSize={20}
+              backgroundColor={'slategray'}
+              style={styles.submitButton}
+            />
+          )}
 
-        <Text style={styles.infoText} onPress={handleSignUp}>Kaydolmak için tıklayın</Text>
+          <Text style={[styles.infoText, {textDecorationLine: 'underline', textAlign:'center'}]} onPress={handleSignUp}>
+            Kaydolmak için tıklayın
+          </Text>
+        </View>
+        <Portal>
+          <Modal
+            visible={forgotModalOpen}
+            onDismiss={()=>{setForgotModalOpen(false)}}
+            contentContainerStyle={styles.modalContainer}>
+            <Text style={styles.modalHeading}> E-posta adresinizi girin: </Text>
+            <TextInput
+              style={styles.modalInput}
+              value={emailToSend}
+              onChangeText={ (value) => {setEmailToSend(value)} }
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                marginTop: 20,
+              }}>
+              <Button title="Tamam" onPress={handleResetPassword} />
+              <Button title="Vazgeç" onPress={() => {setForgotModalOpen(false) } } />
+            </View>
+          </Modal>
+        </Portal>
       </View>
-    </View>
+    </PaperProvider>
   );
 };
 
@@ -118,11 +179,14 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   input: {
-    width: 200,
-    backgroundColor: 'white',
+    width: Dimensions.get('window').width * 0.9,
+    backgroundColor: 'black',
     fontSize: 20,
     marginBottom: 20,
     borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'white',
+    color: 'white'
   },
   header: {},
   titleText: {
@@ -143,6 +207,18 @@ const styles = StyleSheet.create({
   submitButton: {
     marginBottom: 10,
   },
+  modalContainer: {
+    margin:30,
+    backgroundColor: 'white',
+    paddingVertical:100,
+    paddingHorizontal:50
+},
+modalHeading: {
+  fontSize: 18
+},
+modalInput: {
+  fontSize: 18
+}
 });
 
 export default Login;
