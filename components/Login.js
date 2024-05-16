@@ -123,7 +123,7 @@ const Login = ({navigation, route}) => {
                 <Text style={styles.infoText}> Beni hatırla </Text>
               </View>
               <View >
-                <Text style={[styles.infoText, {textDecorationLine: 'underline'}]} onPress={()=>{setForgotModalOpen(true)}}> Şifremi unuttum </Text>
+                <Text style={[styles.infoText, {textDecorationLine: 'underline'}]} onPress={()=>{setForgotModalOpen(true)}}>Şifremi unuttum</Text>
               </View>
             </View>
           </View>

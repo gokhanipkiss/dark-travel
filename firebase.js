@@ -25,6 +25,7 @@ export const db = getFirestore()
 // collection ref
 const placesRef = collection(db, 'places')
 const toursRef = collection(db, 'tours')
+const storiesRef = collection(db, 'stories')
 const usersRef = collection(db, 'users')
 
 
@@ -37,6 +38,12 @@ export const getLocations = () => {
 
 export const getTours = () => {
     return getDocs(toursRef).catch(
+        err => console.log(err.toString())
+    )
+}
+
+export const getStories = () => {
+    return getDocs(storiesRef).catch(
         err => console.log(err.toString())
     )
 }

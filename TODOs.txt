@@ -1,6 +1,10 @@
-Forgot password
-Change password
+Konsoldaki hata mesajları? 
+
+Error: ENOENT: no such file or directory, open 'D:\root\react-native\packages\react-native\ReactAndroid\hermes-engine\.cxx\Release\e4t6q3ku\x86_64\lib\InternalBytecode\InternalBytecode.js'
+
 
 Home page background image, üst tuşlar
-Tekrar eden başlıklar için Custom component
+
 Home search bar işlevi
+
+Build into APK
