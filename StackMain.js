@@ -10,6 +10,7 @@ import { isLoggedIn, userAddnlInfo } from './App';
 import Account from './components/Account';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, getUser } from './firebase';
+import CharSelection from './components/CharSelection';
 
 
 const StackMain = () => {
@@ -28,8 +29,8 @@ const StackMain = () => {
               console.log("userInfo: %O", result)
             }            
         ).catch(err => console.log(err));
-        navigationRef.navigate('TabMain')
-        console.log("AUTH STATE CHANGED")
+        // navigationRef.navigate('TabMain')
+        
       } else {
         isLoggedIn.value = false;        
         
@@ -48,7 +49,7 @@ const StackMain = () => {
     
     return (
       <NavigationContainer ref={navigationRef} >        
-          <Stack.Navigator initialRouteName= {isLoggedIn.value ? 'TabMain' : 'Login'}>
+          <Stack.Navigator>
           {isLoggedIn.value ? (
             <>
               <Stack.Screen
@@ -59,6 +60,11 @@ const StackMain = () => {
               <Stack.Screen
                 name="SignUp"
                 component={SignUp}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name='CharSelection'
+                component={CharSelection}
                 options={{headerShown: false}}
               />
               <Stack.Screen

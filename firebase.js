@@ -55,17 +55,22 @@ export const auth = initializeAuth(app, {
 });
 
 
-export const signUp = (email, password, name, city) => {
+export const signUp = (email, password, name, city, clearFields, navigation) => {
     return createUserWithEmailAndPassword(auth, email, password).then(
             (credentials) => {
              updateProfile(auth.currentUser, {
               displayName: name
-            })
+            });
              setDoc(doc(db, 'users', auth.currentUser.uid), {
-              location: city
+              location: city,
+              friendCount: 0,
+              badges: []
             });
             
-            Alert.alert("Başarı", "Kullanıcı başarıyla kaydedildi." /* , signUpSuccessButton */ )            
+            Alert.alert("Başarı", "Kullanıcı başarıyla kaydedildi." /* , signUpSuccessButton */ )
+            clearFields();
+            navigation.navigate('CharSelection')
+
         }
     ).catch(err => {
         if (err.toString().includes("weak-password"))
@@ -80,10 +85,11 @@ export const signUp = (email, password, name, city) => {
     )
   }
 
-  export const signIn = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password).then(
+  export const signIn = (email, password, navigation) => {
+    return signInWithEmailAndPassword(auth, email, password).then(
         (result) => {
             // console.log("Logged In")
+            navigation.navigate('TabMain')
         }
     ).catch(err => {
         if (err.toString().includes("invalid-credential"))

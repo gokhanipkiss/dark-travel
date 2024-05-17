@@ -49,9 +49,8 @@ const SignUp = ({navigation}) => {
       setLoading(false)
     }
     else{   
-      signUp(email, password, name, city).then(()=> {   // Bu yapıyı ilk defa kullandım, öbür tarafta tanımladığım promise'in burada then'ine ekleme yapabiliyorum
-        clearFields();
-        console.log("then2")
+      signUp(email, password, name, city, clearFields, navigation).then(()=> { 
+        //then'i buraya yazarsam orada catch'e girse bile giriyor buraya, o yüzden her şeyi oraya gönderdim
       })
       .finally(
         setLoading(false)
@@ -77,30 +76,34 @@ const SignUp = ({navigation}) => {
             style={styles.input}
             onChangeText={onChangeName}
             placeholder="İsim"
+            placeholderTextColor='gray'
             value={name}
           />
            <TextInput
             style={styles.input}
             onChangeText={onChangeCity}
             placeholder="Şehir"
+            placeholderTextColor='gray'
             value={city}
           />
           <TextInput
             style={styles.input}
             onChangeText={onChangeEmail}
             placeholder="E-posta"
+            placeholderTextColor='gray'
             value={email}
           />
           <View style={[styles.input, {flexDirection: 'row', justifyContent:'space-between', alignItems:'center'} ]}>
             <TextInput
-              style={{fontSize:20, width:150}}
+              style={{fontSize:20, width:150, color:'white'}}
               onChangeText={onChangePassword}
               placeholder="Şifre"
+              placeholderTextColor='gray'
               value={password}
               textContentType="password"
               secureTextEntry={!showPassword}
             />
-            <IconButton icon={showPassword ? "eye-off-outline" : "eye-outline"} size={24} iconColor='gray' onPress={toggleShowPassword} />          
+            <IconButton icon={showPassword ? "eye-off-outline" : "eye-outline"} size={20} iconColor='gray' onPress={toggleShowPassword} />          
           </View>
           
           {loading ? (
@@ -129,11 +132,14 @@ const styles = StyleSheet.create({
       color: 'white',
     },
     input: {
-      width: 200,
-      backgroundColor: 'white',
+      width: 300,
+      backgroundColor: 'transparent',
       fontSize: 20,
       marginBottom: 20,
       borderRadius: 5,
+      borderWidth:1,
+      borderColor:'white',
+      color:'white'
     },
     header: {},
     titleText: {
@@ -143,7 +149,8 @@ const styles = StyleSheet.create({
     },
     submitButton: {
       marginBottom: 10,
-      marginTop: 30
+      marginTop: 30,
+      height: 42     
     },
   });
 

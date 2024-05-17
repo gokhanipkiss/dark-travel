@@ -13,6 +13,8 @@ import {Checkbox, IconButton, Modal, PaperProvider, Portal} from 'react-native-p
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth, getUser, signIn } from '../firebase';
 import { sendPasswordResetEmail } from 'firebase/auth';
+import { _screen } from '../utils/Urls';
+
 
 
 const Login = ({navigation, route}) => {
@@ -72,7 +74,7 @@ const Login = ({navigation, route}) => {
   }
 
   const handleSubmit = () => {
-    signIn(email, password);
+    signIn(email, password, navigation)
   };  
  
   return (
@@ -86,6 +88,7 @@ const Login = ({navigation, route}) => {
             style={styles.input}
             onChangeText={onChangeEmail}
             placeholder="E-posta"
+            placeholderTextColor='gray'
             value={email}
           />
           <View
@@ -101,13 +104,14 @@ const Login = ({navigation, route}) => {
               style={{fontSize: 20, width: '85%', color:'white'}}
               onChangeText={onChangePassword}
               placeholder="Şifre"
+              placeholderTextColor='gray'
               value={password}
               textContentType="password"
               secureTextEntry={!showPassword}
             />
             <IconButton
               icon={showPassword ? 'eye-off-outline' : 'eye-outline'}
-              size={24}
+              size={20}
               iconColor={'gray'}
               onPress={toggleShowPassword}
             />
@@ -179,7 +183,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   input: {
-    width: Dimensions.get('window').width * 0.9,
+    width: _screen.width * 0.9,
     backgroundColor: 'black',
     fontSize: 20,
     marginBottom: 20,
@@ -206,6 +210,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginBottom: 10,
+    height:42
   },
   modalContainer: {
     margin:30,

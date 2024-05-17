@@ -1,5 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View, Image, ImageBackground, Text, StyleSheet, Dimensions } from 'react-native';
+import { _screen } from '../utils/Urls';
 
 const SplashScreen = () => {
     return (
@@ -15,8 +16,8 @@ const SplashScreen = () => {
 
 const styles = StyleSheet.create({
     image: {
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        width: _screen.width,
+        height: _screen.height,
         opacity:0.7
     },
     container: {

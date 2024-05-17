@@ -4,9 +4,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator, Card, Chip, ProgressBar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { tags } from '../utils/Tags';
-import axios from 'axios';
-import {userAddnlInfo} from '../App';
+import { userAddnlInfo} from '../App';
 import { getLocations, getTours, getStories, getUser } from '../firebase';
+import { _screen } from '../utils/Urls';
 
 
 const Home = () => {
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   scrollView: {
-    width: Dimensions.get('window').width,
+    width: _screen.width,
     paddingHorizontal: 20,
   },
   topButtonContainer: {
@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   missionBar: {
-    width: Dimensions.get('screen').width * 0.9,
+    width: _screen.width * 0.9,
     height: 20,
     borderRadius: 10,
     backgroundColor: 'black',

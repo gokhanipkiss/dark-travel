@@ -5,6 +5,7 @@ import { userAddnlInfo } from '../App';
 import { personaMap } from '../utils/ShortNameMaps';
 import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import { auth } from '../firebase';
+import { _screen } from '../utils/Urls';
 
 
 const Profil = ({navigation}) => {
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
   favoritesSection: {
     paddingTop:20,
     paddingHorizontal:10,
-    height: Dimensions.get('window').height * 0.22
+    height: _screen.height * 0.22
   },
   favoritesCard: {
     height:'100%',
