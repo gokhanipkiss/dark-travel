@@ -53,16 +53,6 @@ const StackMain = () => {
           {isLoggedIn.value ? (
             <>
               <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="SignUp"
-                component={SignUp}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
                 name='CharSelection'
                 component={CharSelection}
                 options={{headerShown: false}}

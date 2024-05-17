@@ -7,6 +7,7 @@ import { tags } from '../utils/Tags';
 import { userAddnlInfo} from '../App';
 import { getLocations, getTours, getStories, getUser } from '../firebase';
 import { _screen } from '../utils/Urls';
+import { categoryMap, personaMap } from '../utils/ShortNameMaps';
 
 
 const Home = () => {
@@ -216,7 +217,7 @@ const Home = () => {
                       />
                     </View>
                     <View style={{padding: 5, height: '50%'}}>
-                      <View style={{height: '70%', overflow: 'hidden'}}>
+                      <View style={{height: 'auto', overflow: 'hidden'}}>
                         <Text
                           style={[titleText, {fontSize: 16, marginBottom: 0}]}>
                           {item.name}
@@ -229,9 +230,8 @@ const Home = () => {
                       <View
                         style={{
                           flexDirection: 'row',
-                          height: 40,
-                          marginBottom: 5,
-                          alignContent: 'center',
+                          height: 'auto',
+                          marginVertical: 5,
                           alignItems: 'center',
                         }}>
                         {item.categories.map((category, ind) => {
@@ -240,10 +240,10 @@ const Home = () => {
                               key={ind}
                               style={storyChip}
                               textStyle={{
-                                fontSize: 10,
-                                color: 'white',
+                                fontSize: 12,
+                                color: 'white'
                               }}>
-                              {category}
+                              {categoryMap[category]}
                             </Chip>
                           );
                         })}
@@ -418,10 +418,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   storyChip: {
-    height: 30,
-    borderRadius: 15,
+    borderRadius:16,  // Bunu ortaya çıkan sonuca göre verdim, height verirsek text align sorunu çıkarıyor Chip
     marginRight: 5,
-    backgroundColor: 'teal',
+    backgroundColor: 'teal'
   },
   missionsContainer: {
     height: 350,
