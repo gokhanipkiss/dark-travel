@@ -5,9 +5,10 @@ import { ActivityIndicator, Card, Chip, ProgressBar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { tags } from '../utils/Tags';
 import { userAddnlInfo} from '../App';
-import { getLocations, getTours, getStories, getUser } from '../firebase';
-import { _screen } from '../utils/Urls';
+import { getLocations, getTours, getStories, getUser, storage } from '../firebase';
+import { _screen, baseUrl, storageTokens, storageUris, storageUrls, thumbTokens, thumbUris } from '../utils/Urls';
 import { categoryMap, personaMap } from '../utils/ShortNameMaps';
+import { getDownloadURL, ref } from 'firebase/storage';
 
 
 const Home = () => {
@@ -23,11 +24,23 @@ const Home = () => {
     const [loadingStories, setLoadingStories ] = useState(true);
     const [category, setCategory] = useState(tags[0])
 
+    async function getUrl() {
+      try{
+      let result = await getDownloadURL(ref(storage, storageUrls.locations.manyetikYolThumb));
+      console.log("url: " , result)
+      }
+      catch(err){
+        console.log(err)
+      }
+        
+    }
 
     useEffect(() => {               
         _getStories()
         _getLocations()
-        _getTours()          
+        _getTours()
+        //getUrl()
+        
     }, []);
 
     async function _getLocations () {   
@@ -139,7 +152,7 @@ const Home = () => {
                 return (
                   <Card key={index} style={locationCard}>
                     <Image
-                      source={require('../assets/images/splash.jpg')}
+                      source={{uri: baseUrl + thumbUris.locations[item.shortName] + '?alt=media&token=' + thumbTokens.locations[item.shortName] }}
                       style={locationImage}
                     />
                     <View style={locationInfo}>

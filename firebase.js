@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { collection, getFirestore, getDocs, setDoc, doc, getDoc } from 'firebase/firestore' 
 import { initializeAuth, getReactNativePersistence, getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from "react-native";
 
@@ -110,14 +111,7 @@ export const signUp = (email, password, name, city, clearFields, navigation) => 
   };
 
 
-// const _auth = getAuth();
-    // const user = _auth.currentUser;
-    // if (user !== null) {
-    //     user.providerData.forEach((profile) => {
-    //       console.log("Sign-in provider: " + profile.providerId);
-    //       console.log("  Provider-specific UID: " + profile.uid);
-    //       console.log("  Name: " + profile.displayName);
-    //       console.log("  Email: " + profile.email);
-    //       console.log("  Photo URL: " + profile.photoURL);
-    //     });
-    //   }
+// Storage
+
+export const storage = getStorage();
+

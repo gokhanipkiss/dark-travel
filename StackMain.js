@@ -49,7 +49,7 @@ const StackMain = () => {
     
     return (
       <NavigationContainer ref={navigationRef} >        
-          <Stack.Navigator>
+          <Stack.Navigator initialRouteName='TabMain'>
           {isLoggedIn.value ? (
             <>
               <Stack.Screen
