@@ -6,21 +6,26 @@ import { View, Text, StyleSheet, Image, Button } from 'react-native';
 const slides = [
     {
         key: 'slide1',
-        title: 'Welcome to My App',
-        text: 'This is the first slide',
-        image: {uri: 'https://picsum.photos/200/400'  } //require('./images/slide1.png'),
+        title: 'Seyahatin karanlık tarafına hoş geldin!',
+        text: '',
+        image: require('../assets/images/onboarding1.png')
     },
     {
         key: 'slide2',
-        title: 'Discover Amazing Features',
-        text: 'This is the second slide',
-        image: {uri: 'https://picsum.photos/201/400'  } //require('./images/slide2.png'),
+        title: '',
+        text: 'Gizemli ve korkunç yerlere keşfe çık. Perili savaş alanlarından terkedilmiş hapishanelere kadar, bilinmezlik heyecanını seven herkes için burada bir şeyler var.',
+        image: require('../assets/images/onboarding2.png'),
     },
     {
         key: 'slide3',
-        title: "Let's get started!",
-        text: '',
-        image: {uri: 'https://picsum.photos/200/401'  } //require('./images/slide2.png'),
+        title: '',
+        text: 'Benzersiz ilgi alanlarına sahip insanlarla bir araya gel. Gizem ve keşif tutkunu diğer gezginlerle tanış, maceranı paylaş ve karanlık yerleri birlikte keşfet.',
+        image: require('../assets/images/onboarding3.png'),
+    },
+    {
+        key: 'slide4',
+        title: 'Gerçeklerle yüzleşmeye hazır mısın?',
+        text: ''
     },
 ];
 

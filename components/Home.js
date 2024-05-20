@@ -24,31 +24,33 @@ const Home = () => {
     const [loadingStories, setLoadingStories ] = useState(true);
     const [category, setCategory] = useState(tags[0])
 
-    async function getUrl() {
-      try{
-      let result = await getDownloadURL(ref(storage, storageUrls.locations.manyetikYolThumb));
-      console.log("url: " , result)
-      }
-      catch(err){
-        console.log(err)
-      }
+    // async function getUrl() {
+    //   try{
+    //   let result = await getDownloadURL(ref(storage, storageUrls.locations.manyetikYolThumb));
+    //   console.log("url: " , result)
+    //   }
+    //   catch(err){
+    //     console.log(err)
+    //   }
         
-    }
+    // }
 
     useEffect(() => {               
         _getStories()
         _getLocations()
         _getTours()
         //getUrl()
-        
     }, []);
+
+    useEffect(()=> {
+      handleClickTag(category)
+    }, [locations, tours, stories])
 
     async function _getLocations () {   
         let arr = []
         getLocations().then(result => {            
             result.docs.map(doc => arr.push(doc.data()))
-            setLocations(arr)
-            handleClickTag(category)
+            setLocations(arr)            
         }).finally(
             setLoadingLocations(false)
         )
@@ -61,8 +63,9 @@ const Home = () => {
         if (result.docs){
             result.docs.map(doc => arr.push(doc.data()))
             setTours(arr)
-            setLoadingTours(false)
-            handleClickTag(category)
+            setLoadingTours(false)            
+        }else{
+          console.log("CATCH")
         }
     }
 
@@ -70,8 +73,7 @@ const Home = () => {
         let arr = []
         getStories().then(result => {            
             result.docs.map(doc => arr.push(doc.data()))
-            setStories(arr)
-            handleClickTag(category)
+            setStories(arr)            
         }).finally(
             setLoadingStories(false)
         )
@@ -112,8 +114,15 @@ const Home = () => {
 
     return (
       <View style={container}>
-        <ScrollView contentContainerStyle={scrollView}>
-          <View style={topButtonContainer}></View>
+        <ScrollView
+          contentContainerStyle={scrollView}
+          showsVerticalScrollIndicator={false}>
+          <ImageBackground
+            style={{width: '110%'}}
+            imageStyle={{left: -30, bottom: -80, opacity: 0.5}}
+            source={require('../assets/images/home-background.png')}>
+            <View style={topButtonContainer}></View>
+          </ImageBackground>
 
           <View style={searchBarContainer}>
             <Text style={titleText}>Karanlığa Hoşgeldin</Text>
@@ -123,150 +132,158 @@ const Home = () => {
             </View>
           </View>
 
-          <ScrollView horizontal style={chipContainer}>
-            {tags
-              .sort(tag => {
-                return tag === category ? -1 : 1;
-              })
-              .map((item, index) => {
-                return (
-                  <Chip
-                    key={index}
-                    style={item === category ? chipSelected : chip}
-                    textStyle={{fontSize: 16, color: 'white'}}
-                    onPress={() => {
-                      handleClickTag(item);
-                    }}>
-                    {item}
-                  </Chip>
-                );
-              })}
-          </ScrollView>
-
-          <HeaderSection titleText="Rotanı Belirleyecek Konumlar" />
-          {loadingLocations ? (
-            <ActivityIndicator />
-          ) : (
-            <ScrollView horizontal style={placesContainer}>
-              {locationsFiltered.map((item, index) => {
-                return (
-                  <Card key={index} style={locationCard}>
-                    <Image
-                      source={{uri: baseUrl + thumbUris.locations[item.shortName] + '?alt=media&token=' + thumbTokens.locations[item.shortName] }}
-                      style={locationImage}
-                    />
-                    <View style={locationInfo}>
-                      <Text
-                        style={[titleText, {fontSize: 16, marginBottom: 0}]}>
-                        {item.name}
-                      </Text>
-                      <View style={{flexDirection: 'row'}}>
-                        <Icon name="location-on" color="teal" size={20} />
-                        <Text style={text}>{item.location}</Text>
-                      </View>
-                    </View>
-                  </Card>
-                );
-              })}
+          <View style={{paddingLeft:15}}>
+            <ScrollView horizontal style={chipContainer}>
+              {tags
+                .sort(tag => {
+                  return tag === category ? -1 : 1;
+                })
+                .map((item, index) => {
+                  return (
+                    <Chip
+                      key={index}
+                      style={item === category ? chipSelected : chip}
+                      textStyle={{fontSize: 16, color: 'white'}}
+                      onPress={() => {
+                        handleClickTag(item);
+                      }}>
+                      {item}
+                    </Chip>
+                  );
+                })}
             </ScrollView>
-          )}
 
-          <HeaderSection titleText="Kaşiflerin Birleştiği Turlar" />
+            <HeaderSection titleText="Rotanı Belirleyecek Konumlar" />
+            {loadingLocations ? (
+              <ActivityIndicator />
+            ) : (
+              <ScrollView horizontal style={placesContainer}>
+                {locationsFiltered.map((item, index) => {
+                  return (
+                    <Card key={index} style={locationCard}>
+                      <Image
+                        source={{uri: item.thumbUrl}}
+                        style={locationImage}
+                      />
+                      <View style={locationInfo}>
+                        <Text
+                          style={[titleText, {fontSize: 16, marginBottom: 0}]}>
+                          {item.name}
+                        </Text>
+                        <View style={{flexDirection: 'row'}}>
+                          <Icon name="location-on" color="teal" size={20} />
+                          <Text style={text}>{item.location}</Text>
+                        </View>
+                      </View>
+                    </Card>
+                  );
+                })}
+              </ScrollView>
+            )}
 
-          {loadingTours ? (
-            <ActivityIndicator />
-          ) : (
-            <ScrollView horizontal style={placesContainer}>
-              {toursFiltered.map((item, index) => {
-                return (
-                  <Card key={index} style={tourCard}>
-                    <ImageBackground
-                      source={require('../assets/images/splash.jpg')}
-                      style={tourImage}
-                      borderRadius={10}>
-                      <View style={tourLeader}>
-                        <Image
-                          source={require('../assets/images/avatar4_.jpg')}
-                          style={leaderImage}
-                        />
-                        <View>
+            <HeaderSection titleText="Kaşiflerin Birleştiği Turlar" />
+
+            {loadingTours ? (
+              <ActivityIndicator />
+            ) : (
+              <ScrollView horizontal style={placesContainer}>
+                {toursFiltered.map((item, index) => {
+                  return (
+                    <Card key={index} style={tourCard}>
+                      <ImageBackground
+                        source={{uri: item.thumbUrl}}
+                        style={tourImage}
+                        borderRadius={10}>
+                        <View style={tourLeader}>
+                          <Image
+                            source={require('../assets/images/avatar4_.jpg')}
+                            style={leaderImage}
+                          />
+                          <View>
+                            <Text
+                              style={[
+                                titleText,
+                                {fontSize: 16, marginBottom: 0},
+                              ]}>
+                              {item.leader}
+                            </Text>
+                            <Text style={text}>{item.leaderTitle}</Text>
+                          </View>
+                        </View>
+                        <View style={tourInfo}>
                           <Text
                             style={[
                               titleText,
                               {fontSize: 16, marginBottom: 0},
                             ]}>
-                            {item.leader}
+                            {' '}
+                            {item.name}{' '}
                           </Text>
-                          <Text style={text}>{item.leaderTitle}</Text>
+                          <Text style={text}> {item.body} </Text>
+                        </View>
+                      </ImageBackground>
+                    </Card>
+                  );
+                })}
+              </ScrollView>
+            )}
+
+            <HeaderSection titleText="Karanlık Hikayeler" />
+            {loadingStories ? (
+              <ActivityIndicator />
+            ) : (
+              <ScrollView horizontal style={placesContainer}>
+                {storiesFiltered.map((item, index) => {
+                  return (
+                    <Card key={index} style={storyCard}>
+                      <View style={{height: '50%'}}>
+                        <Image
+                          source={{uri: item.thumbUrl}}
+                          style={[locationImage, {height: '100%'}]}
+                        />
+                      </View>
+                      <View style={{padding: 5, height: '50%'}}>
+                        <View style={{height: '67%', overflow: 'hidden'}}>
+                          <Text
+                            style={[
+                              titleText,
+                              {fontSize: 16, marginBottom: 0},
+                            ]}>
+                            {item.name}
+                          </Text>
+                          <Text numberOfLines={2} style={text}>
+                            {' '}
+                            {item.body}{' '}
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            height: 'auto',
+                            marginVertical: 5,
+                            alignItems: 'center'
+                          }}>
+                          {item.categories.map((category, ind) => {
+                            return (
+                              <Chip
+                                key={ind}
+                                style={storyChip}
+                                textStyle={{
+                                  fontSize: 10,
+                                  color: 'white',
+                                }}>
+                                {categoryMap[category]}
+                              </Chip>
+                            );
+                          })}
                         </View>
                       </View>
-                      <View style={tourInfo}>
-                        <Text
-                          style={[titleText, {fontSize: 16, marginBottom: 0}]}>
-                          {' '}
-                          {item.name}{' '}
-                        </Text>
-                        <Text style={text}> {item.body} </Text>
-                      </View>
-                    </ImageBackground>
-                  </Card>
-                );
-              })}
-            </ScrollView>
-          )}
-
-          <HeaderSection titleText="Karanlık Hikayeler" />
-          {loadingStories ? (
-            <ActivityIndicator />
-          ) : (
-            <ScrollView horizontal style={placesContainer}>
-              {storiesFiltered.map((item, index) => {
-                return (
-                  <Card key={index} style={storyCard}>
-                    <View style={{height: '50%'}}>
-                      <Image
-                        source={require('../assets/images/splash.jpg')}
-                        style={[locationImage, {height: '100%'}]}
-                      />
-                    </View>
-                    <View style={{padding: 5, height: '50%'}}>
-                      <View style={{height: 'auto', overflow: 'hidden'}}>
-                        <Text
-                          style={[titleText, {fontSize: 16, marginBottom: 0}]}>
-                          {item.name}
-                        </Text>
-                        <Text numberOfLines={2} style={text}>
-                          {' '}
-                          {item.body}{' '}
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          height: 'auto',
-                          marginVertical: 5,
-                          alignItems: 'center',
-                        }}>
-                        {item.categories.map((category, ind) => {
-                          return (
-                            <Chip
-                              key={ind}
-                              style={storyChip}
-                              textStyle={{
-                                fontSize: 12,
-                                color: 'white'
-                              }}>
-                              {categoryMap[category]}
-                            </Chip>
-                          );
-                        })}
-                      </View>
-                    </View>
-                  </Card>
-                );
-              })}
-            </ScrollView>
-          )}
+                    </Card>
+                  );
+                })}
+              </ScrollView>
+            )}
+          </View>
 
           <View style={styles.missionsContainer}>
             <HeaderSection titleText="Görevler" />
@@ -277,16 +294,18 @@ const Home = () => {
             <Text style={[text, {textAlign: 'center'}]}>
               Topluluk liderleri tarafından düzenlenen 10 etkinliğe katıl
             </Text>
-            <ProgressBar /* Bu çok kötü, kullanmayalım */ visible={false} style={{height:20, borderRadius:10}} progress={0.7}  color="firebrick" />
-            
-            <Card /* yerine bunu yaptım */ style={styles.missionBar}>
-                <Text style={styles.missionBarText}>7/10</Text>
-                <Card style={styles.missionBarFill}>                    
-                </Card>
-            </Card>  
-          
-          </View>
+            <ProgressBar
+              /* Bu çok kötü, kullanmayalım */ visible={false}
+              style={{height: 20, borderRadius: 10}}
+              progress={0.7}
+              color="firebrick"
+            />
 
+            <Card /* yerine bunu yaptım */ style={styles.missionBar}>
+              <Text style={styles.missionBarText}>7/10</Text>
+              <Card style={styles.missionBarFill}></Card>
+            </Card>
+          </View>
         </ScrollView>
       </View>
     );
@@ -304,6 +323,8 @@ const HeaderSection = (props) => { return (
 const styles = StyleSheet.create({
   text: {
     color: 'white',
+    textShadowColor: 'rgb(50,50,50)',
+    textShadowRadius: 10
   },
   container: {
     flex: 1,
@@ -311,16 +332,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   scrollView: {
-    width: _screen.width,
-    paddingHorizontal: 20,
+    width: _screen.width
   },
   topButtonContainer: {
-    height: 80,
-    padding: 20,
+    height: 80
   },
   searchBarContainer: {
     width: '100%',
     paddingVertical: 10,
+    paddingHorizontal:15
   },
   titleText: {
     textAlign: 'left',
@@ -387,7 +407,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   locationImage: {
-    width: 150,
+    width: 'auto',
     height: 100,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -423,7 +443,7 @@ const styles = StyleSheet.create({
   },
   storyCard: {
     borderRadius: 10,
-    width: 150,
+    width: 160,
     height: 240,
     backgroundColor: 'gray',
     marginRight: 10,
@@ -433,12 +453,12 @@ const styles = StyleSheet.create({
   storyChip: {
     borderRadius:16,  // Bunu ortaya çıkan sonuca göre verdim, height verirsek text align sorunu çıkarıyor Chip
     marginRight: 5,
-    backgroundColor: 'teal'
+    backgroundColor: 'teal',
+    flexShrink:1,
   },
   missionsContainer: {
     height: 350,
-    marginHorizontal: -10,
-    backgroundColor: 'rgb(50, 50, 50)',
+    backgroundColor: 'rgb(60, 60, 60)',
     padding: 10,
   },
   missionImage: {
