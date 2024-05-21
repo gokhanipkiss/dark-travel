@@ -11,7 +11,7 @@ import { categoryMap, personaMap } from '../utils/ShortNameMaps';
 import { getDownloadURL, ref } from 'firebase/storage';
 
 
-const Home = () => {
+const Home = ({navigation}) => {
 
     const [locations, setLocations] = useState([]);
     const [locationsFiltered, setLocationsFiltered] = useState([])
@@ -160,7 +160,7 @@ const Home = () => {
               <ScrollView horizontal style={placesContainer}>
                 {locationsFiltered.map((item, index) => {
                   return (
-                    <Card key={index} style={locationCard}>
+                    <Card key={index} style={locationCard} onPress={()=>{navigation.navigate('LocationDetail', {location: item.name })}}>
                       <Image
                         source={{uri: item.thumbUrl}}
                         style={locationImage}

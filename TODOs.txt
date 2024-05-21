@@ -8,3 +8,7 @@ Home page background image, üst tuşlar
 Home search bar işlevi
 
 Build into APK
+
+User avatarlar
+
+Font dene

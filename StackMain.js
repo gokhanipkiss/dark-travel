@@ -11,6 +11,7 @@ import Account from './components/Account';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, getUser } from './firebase';
 import CharSelection from './components/CharSelection';
+import LocationDetail from './components/LocationDetail';
 
 
 const StackMain = () => {
@@ -60,6 +61,11 @@ const StackMain = () => {
               <Stack.Screen
                 name="TabMain"
                 component={TabMain}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name='LocationDetail'
+                component={LocationDetail}
                 options={{headerShown: false}}
               />
               <Stack.Screen 

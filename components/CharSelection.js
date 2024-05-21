@@ -13,17 +13,20 @@ import CustomButton from '../custom-components/CustomButton';
 import { _screen } from '../utils/Urls';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
+import { userAddnlInfo } from '../App';
 
 const CharSelection = ({navigation}) => {
 
   const [selectedOption, setSelectedOption] = useState('');
 
   const handleSubmit = () => {
+    userAddnlInfo.value.persona = selectedOption, // We won't wait for getting it from Firebase because it responds slowly
     setDoc(doc(db, 'users', auth.currentUser.uid), {
         persona: selectedOption
-      }).catch(err=>
+      })
+      .catch(err=>
         Alert.alert('Hata', err.toString())
-      ).finally(
+      ).finally(        
         navigation.navigate('TabMain')
       );
   }
