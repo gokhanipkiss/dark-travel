@@ -40,19 +40,19 @@ const CharSelection = ({navigation}) => {
         etme, daha sonra seçtiğin karakteri profilinden değiştirebilirsin.
       </Text>
       <View style={imagesContainer}>
-        <ImageBackground source={require('../assets/images/splash.jpg')} imageStyle={selectedOption === 'myst' ? imageSelected: image}>
+        <ImageBackground source={require('../assets/images/persona-myst.png')} imageStyle={selectedOption === 'myst' ? imageSelected: image}>
           <TouchableOpacity onPress={()=>{setSelectedOption('myst')}} style={[selectedOption === 'myst' ? imageSelected: image, {justifyContent:'flex-end', padding:5}]}>
             <Text style={[heading, {fontSize: 15}]}>Gizemli Kaşif</Text>
             <Text style={[heading, {fontSize: 13}]}>Paranormal faaliyetler, doğaüstü efsaneler ve çözülmemiş gizemleri olan yerler ilgimi çekiyor.</Text>
           </TouchableOpacity>
         </ImageBackground>
-        <ImageBackground source={require('../assets/images/splash.jpg')} imageStyle={selectedOption === 'hist' ? imageSelected: image}>
+        <ImageBackground source={require('../assets/images/persona-hist.png')} imageStyle={selectedOption === 'hist' ? imageSelected: image}>
           <TouchableOpacity onPress={()=>{setSelectedOption('hist')}} style={[selectedOption === 'hist' ? imageSelected: image, {justifyContent:'flex-end', padding:5}]}>
             <Text style={[heading, {fontSize: 15}]}>Tarih Tutkunu</Text>
             <Text style={[heading, {fontSize: 13}]}>İnsanlık tarihinin karanlık yanlarını ve bunun kültürel önemini anlama konusunda hevesliyim.</Text>
           </TouchableOpacity>
         </ImageBackground>
-        <ImageBackground source={require('../assets/images/splash.jpg')} imageStyle={selectedOption === 'adv' ? imageSelected: image}>
+        <ImageBackground source={require('../assets/images/persona-adv.png')} imageStyle={selectedOption === 'adv' ? imageSelected: image}>
           <TouchableOpacity onPress={()=>{setSelectedOption('adv')}} style={[selectedOption === 'adv' ? imageSelected: image, {justifyContent:'flex-end', padding:5}]}>
             <Text style={[heading, {fontSize: 15}]}>Sıradışı Maceracı</Text>
             <Text style={[heading, {fontSize: 13}]}>Normlara meydan okuyan, yeni deneyimler ve benzersiz bakış açıları sunan yerleri merak ederim.</Text>

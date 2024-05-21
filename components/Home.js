@@ -5,7 +5,7 @@ import { ActivityIndicator, Card, Chip, ProgressBar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { tags } from '../utils/Tags';
 import { userAddnlInfo} from '../App';
-import { getLocations, getTours, getStories, getUser, storage } from '../firebase';
+import { getLocations, getTours, getStories, getUser, storage, auth } from '../firebase';
 import { _screen, baseUrl, storageTokens, storageUris, storageUrls, thumbTokens, thumbUris } from '../utils/Urls';
 import { categoryMap, personaMap } from '../utils/ShortNameMaps';
 import { getDownloadURL, ref } from 'firebase/storage';
@@ -120,7 +120,7 @@ const Home = () => {
           <ImageBackground
             style={{width: '110%'}}
             imageStyle={{left: -30, bottom: -80, opacity: 0.5}}
-            source={require('../assets/images/home-background.png')}>
+            source={userAddnlInfo.value.persona === 'myst' ? require('../assets/images/persona-myst.png') : userAddnlInfo.value.persona === 'hist' ? require('../assets/images/persona-hist.png') : require('../assets/images/persona-adv.png')}>
             <View style={topButtonContainer}></View>
           </ImageBackground>
 
@@ -252,8 +252,7 @@ const Home = () => {
                             {item.name}
                           </Text>
                           <Text numberOfLines={2} style={text}>
-                            {' '}
-                            {item.body}{' '}
+                            {item.body}
                           </Text>
                         </View>
                         <View
