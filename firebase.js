@@ -24,30 +24,30 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore()
 
 // collection ref
-const placesRef = collection(db, 'places')
-const toursRef = collection(db, 'tours')
-const storiesRef = collection(db, 'stories')
+export const placesRef = collection(db, 'places')
+export const toursRef = collection(db, 'tours')
+export const storiesRef = collection(db, 'stories')
 const usersRef = collection(db, 'users')
 
 
 // get collection data
-export const getLocations = () => {   
-    return getDocs(placesRef).catch(
-        err => console.log(err.toString())
-    )
-}
+// export const getLocations = () => {
+//     return getDocs(placesRef).catch(
+//         err => console.log(err.toString())
+//     )
+// }
 
-export const getTours = () => {
-    return getDocs(toursRef).catch(
-        err => console.log(err.toString())
-    )
-}
+// export const getTours = () => {
+//     return getDocs(toursRef).catch(
+//         err => console.log(err.toString())
+//     )
+// }
 
-export const getStories = () => {
-    return getDocs(storiesRef).catch(
-        err => console.log(err.toString())
-    )
-}
+// export const getStories = () => {
+//     return getDocs(storiesRef).catch(
+//         err => console.log(err.toString())
+//     )
+// }
 
 
 // auth

@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
     borderRadius:7
   },
   imageSelected: {
-    width: 300,
-    height:180,
+    width: 320,
+    height:200,
     borderRadius:7,
     borderColor:'firebrick',
     borderWidth:3

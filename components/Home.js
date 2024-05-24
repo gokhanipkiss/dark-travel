@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import { Text, StyleSheet, View, SafeAreaView, TextInput, Dimensions, Image, ImageBackground } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator, Card, Chip, ProgressBar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { tags } from '../utils/Tags';
 import { userAddnlInfo} from '../App';
-import { getLocations, getTours, getStories, getUser, storage, auth } from '../firebase';
+import {  getUser, storage, auth, placesRef, toursRef, storiesRef } from '../firebase';
 import { _screen, baseUrl, storageTokens, storageUris, storageUrls, thumbTokens, thumbUris } from '../utils/Urls';
 import { categoryMap, personaMap } from '../utils/ShortNameMaps';
 import { getDownloadURL, ref } from 'firebase/storage';
+import { getDocs } from 'firebase/firestore';
 
 
 const Home = ({navigation}) => {
@@ -23,6 +24,7 @@ const Home = ({navigation}) => {
     const [loadingTours, setLoadingTours ] = useState(true);
     const [loadingStories, setLoadingStories ] = useState(true);
     const [category, setCategory] = useState(tags[0])
+    const [refreshing, setRefreshing] = useState(false)
 
     // async function getUrl() {
     //   try{
@@ -36,9 +38,9 @@ const Home = ({navigation}) => {
     // }
 
     useEffect(() => {               
-        _getStories()
-        _getLocations()
-        _getTours()
+        getStories()
+        getLocations()
+        getTours()
         //getUrl()
     }, []);
 
@@ -46,38 +48,72 @@ const Home = ({navigation}) => {
       handleClickTag(category)
     }, [locations, tours, stories])
 
-    async function _getLocations () {   
-        let arr = []
-        getLocations().then(result => {            
-            result.docs.map(doc => arr.push(doc.data()))
-            setLocations(arr)            
-        }).finally(
-            setLoadingLocations(false)
-        )
-    }   
+    
+    const getLocations = () => {
+      let arr = []
+      return getDocs(placesRef)
+        .then(result => {
+          result.docs.map(doc => arr.push(doc.data()));
+          setLocations(arr);
+        })
+        .catch(err => console.log(err.toString()))
+        .finally(setLoadingLocations(false));
+    };
+
+    const getTours = () => {
+      let arr = []
+      return getDocs(toursRef)
+        .then(result => {
+          result.docs.map(doc => arr.push(doc.data()));
+          setTours(arr);
+        })
+        .catch(err => console.log(err.toString()))
+        .finally(setLoadingTours(false));
+    };
+
+    const getStories = () => {
+      let arr = []
+      return getDocs(storiesRef)
+        .then(result => {
+          result.docs.map(doc => arr.push(doc.data()));
+          setStories(arr);
+        })
+        .catch(err => console.log(err.toString()))
+        .finally(setLoadingStories(false));
+    };
+    
+    // async function _getLocations () {   
+    //     let arr = []
+    //     getLocations().then(result => {            
+    //         result.docs.map(doc => arr.push(doc.data()))
+    //         setLocations(arr)            
+    //     }).finally(
+    //         setLoadingLocations(false)
+    //     )
+    // }   
 
 
-    async function _getTours () {
-        let arr = []
-        let result = await getTours();
-        if (result.docs){
-            result.docs.map(doc => arr.push(doc.data()))
-            setTours(arr)
-            setLoadingTours(false)            
-        }else{
-          console.log("CATCH")
-        }
-    }
+    // async function _getTours () {
+    //     let arr = []
+    //     let result = await getTours();
+    //     if (result.docs){
+    //         result.docs.map(doc => arr.push(doc.data()))
+    //         setTours(arr)
+    //         setLoadingTours(false)            
+    //     }else{
+    //       console.log("CATCH")
+    //     }
+    // }
 
-    async function _getStories () {   
-        let arr = []
-        getStories().then(result => {            
-            result.docs.map(doc => arr.push(doc.data()))
-            setStories(arr)            
-        }).finally(
-            setLoadingStories(false)
-        )
-    }
+    // async function _getStories () {   
+    //     let arr = []
+    //     getStories().then(result => {            
+    //         result.docs.map(doc => arr.push(doc.data()))
+    //         setStories(arr)            
+    //     }).finally(
+    //         setLoadingStories(false)
+    //     )
+    // }
     
 
     function handleClickTag(title) {
@@ -107,6 +143,10 @@ const Home = ({navigation}) => {
         }
     }
 
+    function onRefresh() {
+      Promise.all([getLocations(), getStories(), getTours()]).finally(console.log("complete"))
+    }
+
     const {container, text, scrollView, topButtonContainer, searchBarContainer, titleText, searchBar,
         textInput, chipContainer, chip, chipSelected, placesHeader, placesContainer, sectionTitle, locationCard,
         locationImage, locationInfo, toursContainer, toursHeader, tourCard, tourInfo, tourImage,
@@ -114,9 +154,8 @@ const Home = ({navigation}) => {
 
     return (
       <View style={container}>
-        <ScrollView
-          contentContainerStyle={scrollView}
-          showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={scrollView} showsVerticalScrollIndicator={false} 
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}  />} >
           <ImageBackground
             style={{width: '110%'}}
             imageStyle={{left: -30, bottom: -80, opacity: 0.5}}
@@ -160,7 +199,9 @@ const Home = ({navigation}) => {
               <ScrollView horizontal style={placesContainer}>
                 {locationsFiltered.map((item, index) => {
                   return (
-                    <Card key={index} style={locationCard} onPress={()=>{navigation.navigate('LocationDetail', {location: item.name })}}>
+                    <Card key={index} style={locationCard} onPress={()=>{
+                      navigation.navigate('LocationDetail', {place: item})
+                      }}>
                       <Image
                         source={{uri: item.thumbUrl}}
                         style={locationImage}
@@ -310,7 +351,7 @@ const Home = ({navigation}) => {
     );
 }
 
-const HeaderSection = (props) => { return (
+export const HeaderSection = (props) => { return (
     <View style={styles.placesHeader}>
     <Text style={styles.sectionTitle} onPress={props.onPress}> {props.titleText} </Text>
     <Text style={styles.sectionTitle}>
