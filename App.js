@@ -26,7 +26,7 @@ function App(){
     const showSplash = () => {
       setTimeout(
         ()=>{setSplashTimedOut(true)},
-        1000
+        2000
       )
     }
     const checkFirstRun = async () => {        

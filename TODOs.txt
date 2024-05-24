@@ -2,15 +2,11 @@ Konsoldaki hata mesajları?
 
 Error: ENOENT: no such file or directory, open 'D:\root\react-native\packages\react-native\ReactAndroid\hermes-engine\.cxx\Release\e4t6q3ku\x86_64\lib\InternalBytecode\InternalBytecode.js'
 
-Beni hatırla çalışmıyor mu?
-
-Scroll sonunda reload
-
 Home page üst tuşlar
 
 Home search bar işlevi
 
-
+Horizontal scroll bug'ı (tek sayfadan az içerik olduğunda + pagingEnabled olduğunda)
 
 User avatarlar
 

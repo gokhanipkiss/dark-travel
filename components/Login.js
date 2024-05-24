@@ -74,6 +74,7 @@ const Login = ({navigation, route}) => {
   }
 
   const handleSubmit = () => {
+    AsyncStorage.setItem('email', remember ? email : '');
     signIn(email, password, navigation)
   };  
  

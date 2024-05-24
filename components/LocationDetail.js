@@ -20,12 +20,15 @@ const LocationDetail = ({navigation, route}) => {
           </ImageBackground>
           <CustomButton style={styles.button} title='Plana Ekle' backgroundColor='firebrick' fontSize={20}/>
           <View style={styles.chipAndMap}>
+            <View style={styles.chipsContainer}>
             {place.categories.map((category,index) => { return (
                 <Chip key={index} style={styles.chip}>
                     <Text style={[styles.text, {fontSize:10}]}>{category}</Text>
-                </Chip>)}
+                </Chip>                
+                )}
             )
             }
+            </View>
             <View style={{flexDirection: 'row', alignItems:'center'}} >
                 <Icon name="location-on" color='white' size={18} />
                 <Text style={[styles.text, {textDecorationLine:'underline'}]}> Haritada Göster</Text>
@@ -58,8 +61,8 @@ const LocationDetail = ({navigation, route}) => {
             </ScrollView>
             <View style={{flexDirection:'row', justifyContent:'center'}}>
                         <Icon name='circle' color='white'/>
-                        {place.detail2 !== '' && (<Icon name='circle' color='dimgray' />)}
-                        {place.detail3 !== '' && (<Icon name='circle' color='dimgray' />)}
+                        {place.detail2 && (place.detail2 !== '') && (<Icon name='circle' color='dimgray' />)}
+                        {place.detail3 && (place.detail3 !== '') && (<Icon name='circle' color='dimgray' />)}
             </View>
           </View>
           <View style={styles.recommContainer}>
@@ -118,11 +121,19 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         alignItems:'center',
         height:'20',
-        marginHorizontal:12
+        marginHorizontal:12,
+        width: '90%',
+        flex: 1
+    },
+    chipsContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      flexShrink: 1
     },
     chip: {
         backgroundColor: 'teal',
-        borderRadius:16
+        borderRadius:16,
+        marginRight:5
     },
     bodyText: {
         margin:12
