@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import { Button, SafeAreaView, View, Text, StyleSheet, Image, Alert } from 'react-native';
+import { Button, SafeAreaView, View, Text, StyleSheet, Image, Alert, TextInput } from 'react-native';
 import { auth, db, getUser } from '../firebase';
-import { IconButton, Modal, PaperProvider, Portal, TextInput } from 'react-native-paper';
+import { IconButton, Modal, PaperProvider, Portal } from 'react-native-paper';
 import { userAddnlInfo } from '../App';
 import { doc, setDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
+import { darkTheme } from '../utils/Theme';
+import CustomButton from '../custom-components/CustomButton';
 
 
 const UserInfo = ({navigation}) => {       
@@ -101,8 +103,8 @@ const UserInfo = ({navigation}) => {
                 onChangeText={handleChangeValue}
               />
               <View style={{flexDirection:'row', justifyContent:'space-around', marginTop:20}}>
-                <Button title='Tamam' onPress={handleEdit} />
-                <Button title='Vazgeç' onPress={handleCloseEdit} />
+                <CustomButton title='Vazgeç' onPress={handleCloseEdit} thin backgroundColor={darkTheme.secondary} fontSize={13} />
+                <CustomButton title='Tamam' onPress={handleEdit} thin backgroundColor={darkTheme.primary} fontSize={13} />
               </View>
               
             </Modal>
@@ -129,25 +131,31 @@ const styles = StyleSheet.create({
     },
     heading:{
         color: 'white',
-        fontWeight:'bold',
-        fontSize:20,
+        fontFamily: 'Lexend-SemiBold',
+        fontSize:18,
         marginEnd: 5
     },
     text:{
         color: 'white',
-        fontSize:20
+        fontSize:18,
+        fontFamily: 'Lexend-Light'
     },
     modalContainer: {
         margin:30,
-        backgroundColor: 'white',
+        backgroundColor: 'ivory',
         paddingVertical:100,
-        paddingHorizontal:50
+        paddingHorizontal:50,
+        borderRadius:10
     },
     modalHeading: {
-
+      fontFamily: 'Lexend-SemiBold',
+      marginBottom:5
     },
     modalInput: {
-
+      backgroundColor: 'lightgray',
+      borderRadius:5,
+      fontFamily: 'Lexend-Regular',
+      paddingHorizontal:7
     }
 })
 

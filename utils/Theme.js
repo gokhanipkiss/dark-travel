@@ -4,6 +4,6 @@ export const darkTheme = {
     textColor: 'white',
     borderColor: 'white',
     primary: '#E6512C',
-    secondary: 'slateGray',
+    secondary: 'slategray',
     green: 'teal'
     }

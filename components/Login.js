@@ -171,9 +171,9 @@ const Login = ({navigation, route}) => {
                 flexDirection: 'row',
                 justifyContent: 'space-around',
                 marginTop: 20,
-              }}>
-              <Button title="Tamam" onPress={handleResetPassword} />
-              <Button title="Vazgeç" onPress={() => {setForgotModalOpen(false) } } />
+              }}>              
+              <CustomButton title='Vazgeç' onPress={() => {setForgotModalOpen(false) } } thin backgroundColor={darkTheme.secondary} fontSize={13} />
+              <CustomButton title='Tamam' onPress={handleResetPassword} thin backgroundColor={darkTheme.primary} fontSize={13} />
             </View>
           </Modal>
       </Portal>
@@ -229,18 +229,21 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     margin:30,
-    backgroundColor: 'white',
+    backgroundColor: 'ivory',
     paddingVertical:100,
-    paddingHorizontal:50
-},
-modalHeading: {
-  fontSize: 18,
-  fontFamily: 'Lexend-Light'
-},
-modalInput: {
-  fontSize: 18,
-  fontFamily: 'Lexend-Light'
-}
+    paddingHorizontal:50,
+    borderRadius:10
+  },
+  modalHeading: {
+    fontFamily: 'Lexend-SemiBold',
+    marginBottom:5
+  },
+  modalInput: {
+    backgroundColor: 'lightgray',
+    borderRadius:5,
+    fontFamily: 'Lexend-Regular',
+    paddingHorizontal:7
+  }
 });
 
 export default Login;

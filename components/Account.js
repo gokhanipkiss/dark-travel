@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, Image, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, Alert, TextInput } from 'react-native';
 import { auth } from '../firebase';
 import { updatePassword } from 'firebase/auth';
 import CustomButton from '../custom-components/CustomButton';
-import { Modal, PaperProvider, Portal, TextInput } from 'react-native-paper';
+import { Modal, PaperProvider, Portal } from 'react-native-paper';
+import { darkTheme } from '../utils/Theme';
 
 
 const Account = () => {
@@ -88,8 +89,8 @@ const Account = () => {
                   justifyContent: 'space-around',
                   marginTop: 20,
                 }}>
-                <Button title="Tamam" onPress={handleSubmit} />
-                <Button title="Vazgeç" onPress={()=>toggleModal(false)} />
+                <CustomButton title='Vazgeç'onPress={()=>toggleModal(false)} thin backgroundColor={darkTheme.secondary} fontSize={13} />
+                <CustomButton title='Tamam' onPress={handleSubmit} thin backgroundColor={darkTheme.primary} fontSize={13} />
               </View>
             </Modal>
           </Portal>
@@ -110,16 +111,21 @@ const styles = StyleSheet.create({
         fontSize:18
     },
     modalContainer: {
-        margin:30,
-        backgroundColor: 'white',
-        paddingVertical:100,
-        paddingHorizontal:50
+      margin:30,
+      backgroundColor: 'ivory',
+      paddingVertical:100,
+      paddingHorizontal:50,
+      borderRadius:10
     },
     modalHeading: {
-
+      fontFamily: 'Lexend-SemiBold',
+      marginBottom:5
     },
     modalInput: {
-
+      backgroundColor: 'lightgray',
+      borderRadius:5,
+      fontFamily: 'Lexend-Regular',
+      paddingHorizontal:7
     }
 })
 

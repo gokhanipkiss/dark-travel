@@ -37,6 +37,7 @@ const CharSelection = ({navigation}) => {
     <ImageBackground
       imageStyle={backgroundImage}
       style={background}
+      blurRadius={10}
       source={require('../assets/images/background1.png')}>
       <Text style={heading}>Karakterini Belirle</Text>
       <Text style={[heading, {fontSize: 14, fontFamily:'Lexend-Light'}]}>

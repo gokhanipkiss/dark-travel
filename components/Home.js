@@ -130,8 +130,9 @@ const Home = ({navigation}) => {
         <ScrollView contentContainerStyle={scrollView} showsVerticalScrollIndicator={false} 
                     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} /* progressBackgroundColor='black' colors={['white','gray']} */  />} >
           <ImageBackground
+            blurRadius={2}
             style={{width: '110%'}}
-            imageStyle={{left: -30, bottom: -80, opacity: 0.5}}
+            imageStyle={{left: -30, bottom: -80, opacity:0.7}}
             source={userAddnlInfo.value.persona === 'myst' ? require('../assets/images/persona-myst.png') : userAddnlInfo.value.persona === 'hist' ? require('../assets/images/persona-hist.png') : require('../assets/images/persona-adv.png')}>
             <View style={topButtonContainer}></View>
           </ImageBackground>

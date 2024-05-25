@@ -111,7 +111,8 @@ const styles = StyleSheet.create({
   },
   menuItemText:{    
     color:'white',
-    fontSize: 20
+    fontSize: 18,
+    fontFamily: 'Lexend-Regular'
   },
   topCard: {
     flexDirection: 'row',
