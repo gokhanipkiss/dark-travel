@@ -6,6 +6,7 @@ import { Card, Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { _screen } from '../utils/Urls';
 import { HeaderSection } from './Home';
+import { darkTheme } from '../utils/Theme';
 
 
 const LocationDetail = ({navigation, route}) => {
@@ -18,7 +19,7 @@ const LocationDetail = ({navigation, route}) => {
               {place.name}
             </Text>
           </ImageBackground>
-          <CustomButton style={styles.button} title='Plana Ekle' backgroundColor='firebrick' fontSize={20}/>
+          <CustomButton style={styles.button} title='Plana Ekle' backgroundColor={darkTheme.primary} fontSize={20}/>
           <View style={styles.chipAndMap}>
             <View style={styles.chipsContainer}>
             {place.categories.map((category,index) => { return (

@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
+        fontFamily: 'Lexend-SemiBold',
         color: 'white',
         textTransform: 'none',
     }

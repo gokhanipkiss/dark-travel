@@ -12,7 +12,6 @@ export const userAddnlInfo = signal({});
 export const isLoggedIn = signal(false)
 
 function App(){
-    
 
     const [splashTimedOut, setSplashTimedOut] = useState(false);
     const [firstRun, setFirstRun] = useState(false);    

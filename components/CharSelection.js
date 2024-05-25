@@ -14,6 +14,7 @@ import { _screen } from '../utils/Urls';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { userAddnlInfo } from '../App';
+import { darkTheme } from '../utils/Theme';
 
 const CharSelection = ({navigation}) => {
 
@@ -36,9 +37,9 @@ const CharSelection = ({navigation}) => {
     <ImageBackground
       imageStyle={backgroundImage}
       style={background}
-      source={require('../assets/images/splash.jpg')}>
+      source={require('../assets/images/background1.png')}>
       <Text style={heading}>Karakterini Belirle</Text>
-      <Text style={[heading, {fontSize: 15}]}>
+      <Text style={[heading, {fontSize: 14, fontFamily:'Lexend-Light'}]}>
         Seçimini yapman sana özel önerilerde bulunmamıza yardımcı olacak. Merak
         etme, daha sonra seçtiğin karakteri profilinden değiştirebilirsin.
       </Text>
@@ -46,33 +47,32 @@ const CharSelection = ({navigation}) => {
         <ImageBackground source={require('../assets/images/persona-myst.png')} imageStyle={selectedOption === 'myst' ? imageSelected: image}>
           <TouchableOpacity onPress={()=>{setSelectedOption('myst')}} style={[selectedOption === 'myst' ? imageSelected: image, {justifyContent:'flex-end', padding:5}]}>
             <Text style={[heading, {fontSize: 15}]}>Gizemli Kaşif</Text>
-            <Text style={[heading, {fontSize: 13}]}>Paranormal faaliyetler, doğaüstü efsaneler ve çözülmemiş gizemleri olan yerler ilgimi çekiyor.</Text>
+            <Text style={[heading, {fontSize: 13, fontFamily:'Lexend-Light'}]}>Paranormal faaliyetler, doğaüstü efsaneler ve çözülmemiş gizemleri olan yerler ilgimi çekiyor.</Text>
           </TouchableOpacity>
         </ImageBackground>
         <ImageBackground source={require('../assets/images/persona-hist.png')} imageStyle={selectedOption === 'hist' ? imageSelected: image}>
           <TouchableOpacity onPress={()=>{setSelectedOption('hist')}} style={[selectedOption === 'hist' ? imageSelected: image, {justifyContent:'flex-end', padding:5}]}>
             <Text style={[heading, {fontSize: 15}]}>Tarih Tutkunu</Text>
-            <Text style={[heading, {fontSize: 13}]}>İnsanlık tarihinin karanlık yanlarını ve bunun kültürel önemini anlama konusunda hevesliyim.</Text>
+            <Text style={[heading, {fontSize: 13, fontFamily:'Lexend-Light'}]}>İnsanlık tarihinin karanlık yanlarını ve bunun kültürel önemini anlama konusunda hevesliyim.</Text>
           </TouchableOpacity>
         </ImageBackground>
         <ImageBackground source={require('../assets/images/persona-adv.png')} imageStyle={selectedOption === 'adv' ? imageSelected: image}>
           <TouchableOpacity onPress={()=>{setSelectedOption('adv')}} style={[selectedOption === 'adv' ? imageSelected: image, {justifyContent:'flex-end', padding:5}]}>
             <Text style={[heading, {fontSize: 15}]}>Sıradışı Maceracı</Text>
-            <Text style={[heading, {fontSize: 13}]}>Normlara meydan okuyan, yeni deneyimler ve benzersiz bakış açıları sunan yerleri merak ederim.</Text>
+            <Text style={[heading, {fontSize: 13, fontFamily:'Lexend-Light'}]}>Normlara meydan okuyan, yeni deneyimler ve benzersiz bakış açıları sunan yerleri merak ederim.</Text>
           </TouchableOpacity>
         </ImageBackground>
       </View>
       <CustomButton
         title="Devam Et"
-        backgroundColor={selectedOption === '' ? 'dimgray' : 'firebrick'}
-        fontWeight="bold"
+        backgroundColor={selectedOption === '' ? 'dimgray' : darkTheme.primary}
         fontSize={18}
         style={button}
         onPress={selectedOption === '' ? null : handleSubmit}
       />
       <Text style={[text, {fontSize: 16}]}>
-        Karar veremedin mi?
-        <Text style={{textDecorationLine: 'underline', fontWeight: 'bold'}}>
+        Karar veremedin mi? {' '}
+        <Text style={{textDecorationLine: 'underline', fontFamily: 'Lexend-SemiBold'}}>
           Testi çöz
         </Text>
       </Text>
@@ -83,12 +83,14 @@ const CharSelection = ({navigation}) => {
 const styles = StyleSheet.create({
   heading: {
     color:'white',
-    fontSize:22,
+    fontSize:20,
     textAlign:'center',
     textShadowRadius:10,
-    textShadowColor:'dimgray'
+    textShadowColor:'dimgray',
+    fontFamily: 'Lexend-SemiBold'
   },  
   background: {
+    backgroundColor: darkTheme.backgroundColor,
     width: _screen.width,
     height: _screen.height,
     paddingVertical:20
@@ -108,14 +110,15 @@ const styles = StyleSheet.create({
     width: 320,
     height:200,
     borderRadius:7,
-    borderColor:'firebrick',
+    borderColor:darkTheme.primary,
     borderWidth:3
   },
   text: {
     color: 'white',
     textAlign: 'center',
     textShadowRadius:10,
-    textShadowColor:'dimgray'
+    textShadowColor:'dimgray',
+    fontFamily: 'Lexend-Light'
   },
   button:{
     width:300, height:50, alignSelf: 'center',

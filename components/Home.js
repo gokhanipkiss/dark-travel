@@ -10,6 +10,7 @@ import { _screen, baseUrl, storageTokens, storageUris, storageUrls, thumbTokens,
 import { categoryMap, personaMap } from '../utils/ShortNameMaps';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { getDocs } from 'firebase/firestore';
+import { darkTheme } from '../utils/Theme';
 
 
 const Home = ({navigation}) => {
@@ -81,40 +82,6 @@ const Home = ({navigation}) => {
         .catch(err => console.log(err.toString()))
         .finally(setLoadingStories(false));
     };
-    
-    // async function _getLocations () {   
-    //     let arr = []
-    //     getLocations().then(result => {            
-    //         result.docs.map(doc => arr.push(doc.data()))
-    //         setLocations(arr)            
-    //     }).finally(
-    //         setLoadingLocations(false)
-    //     )
-    // }   
-
-
-    // async function _getTours () {
-    //     let arr = []
-    //     let result = await getTours();
-    //     if (result.docs){
-    //         result.docs.map(doc => arr.push(doc.data()))
-    //         setTours(arr)
-    //         setLoadingTours(false)            
-    //     }else{
-    //       console.log("CATCH")
-    //     }
-    // }
-
-    // async function _getStories () {   
-    //     let arr = []
-    //     getStories().then(result => {            
-    //         result.docs.map(doc => arr.push(doc.data()))
-    //         setStories(arr)            
-    //     }).finally(
-    //         setLoadingStories(false)
-    //     )
-    // }
-    
 
     function handleClickTag(title) {
         setCategory(title)
@@ -143,9 +110,15 @@ const Home = ({navigation}) => {
         }
     }
 
-    function onRefresh() {
-      Promise.all([getLocations(), getStories(), getTours()]).finally(console.log("complete"))
-    }
+    const onRefresh = React.useCallback(() => {
+      setRefreshing(true);      
+    }, []);
+
+     useEffect(() => {
+       if (refreshing){ 
+        Promise.all([getLocations(), getStories(), getTours()]).finally(setRefreshing(false))
+       }        
+     }, [refreshing]);
 
     const {container, text, scrollView, topButtonContainer, searchBarContainer, titleText, searchBar,
         textInput, chipContainer, chip, chipSelected, placesHeader, placesContainer, sectionTitle, locationCard,
@@ -155,7 +128,7 @@ const Home = ({navigation}) => {
     return (
       <View style={container}>
         <ScrollView contentContainerStyle={scrollView} showsVerticalScrollIndicator={false} 
-                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}  />} >
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} /* progressBackgroundColor='black' colors={['white','gray']} */  />} >
           <ImageBackground
             style={{width: '110%'}}
             imageStyle={{left: -30, bottom: -80, opacity: 0.5}}
@@ -208,9 +181,7 @@ const Home = ({navigation}) => {
                       />
                       <View style={locationInfo}>
                         <Text
-                          style={[titleText, {fontSize: 16, marginBottom: 0}]}>
-                          {item.name}
-                        </Text>
+                          style={[titleText, {fontSize: 16, marginBottom: 0}]}>{item.name}</Text>
                         <View style={{flexDirection: 'row'}}>
                           <Icon name="location-on" color="teal" size={20} />
                           <Text style={text}>{item.location}</Text>
@@ -246,7 +217,7 @@ const Home = ({navigation}) => {
                                 titleText,
                                 {fontSize: 16, marginBottom: 0},
                               ]}>
-                              {item.leader}
+                                {item.leader}
                             </Text>
                             <Text style={text}>{item.leaderTitle}</Text>
                           </View>
@@ -257,8 +228,7 @@ const Home = ({navigation}) => {
                               titleText,
                               {fontSize: 16, marginBottom: 0},
                             ]}>
-                            {' '}
-                            {item.name}{' '}
+                              {item.name}
                           </Text>
                           <Text style={text}> {item.body} </Text>
                         </View>
@@ -338,7 +308,7 @@ const Home = ({navigation}) => {
               /* Bu çok kötü, kullanmayalım */ visible={false}
               style={{height: 20, borderRadius: 10}}
               progress={0.7}
-              color="firebrick"
+              color={darkTheme.primary}
             />
 
             <Card /* yerine bunu yaptım */ style={styles.missionBar}>
@@ -364,7 +334,8 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     textShadowColor: 'rgb(50,50,50)',
-    textShadowRadius: 10
+    textShadowRadius: 10,
+    fontFamily: 'Lexend-Light'
   },
   container: {
     flex: 1,
@@ -385,7 +356,7 @@ const styles = StyleSheet.create({
   titleText: {
     textAlign: 'left',
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Lexend-SemiBold',
     color: 'white',
     marginBottom: 10,
   },
@@ -424,7 +395,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     marginRight: 10,
-    backgroundColor: 'firebrick',
+    backgroundColor: darkTheme.primary,
   },
   placesHeader: {
     marginTop: 10,
@@ -433,8 +404,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: 'Lexend-SemiBold'
   },
   placesContainer: {
     paddingVertical: 10,
@@ -480,6 +451,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
+    marginRight:5
   },
   storyCard: {
     borderRadius: 10,
@@ -505,7 +477,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    borderColor: 'firebrick',
+    borderColor: darkTheme.primary,
     borderWidth: 2,
     marginVertical: 20,
     alignSelf: 'center',
@@ -522,7 +494,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: '70%',
     height: '100%',
-    backgroundColor: 'firebrick',
+    backgroundColor: darkTheme.primary,
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
   },

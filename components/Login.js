@@ -6,7 +6,7 @@ import {
   TextInput,
   Button,
   ActivityIndicator,
-  Alert, Dimensions
+  Alert, Dimensions, Image
 } from 'react-native';
 import CustomButton from '../custom-components/CustomButton';
 import {Checkbox, IconButton, Modal, PaperProvider, Portal} from 'react-native-paper';
@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth, getUser, signIn } from '../firebase';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { _screen } from '../utils/Urls';
+import { darkTheme } from '../utils/Theme';
 
 
 
@@ -82,73 +83,79 @@ const Login = ({navigation, route}) => {
     <PaperProvider>
       <View style={styles.main}>
         <View style={styles.header}>
-          <Text style={styles.titleText}>Giriş</Text>
-        </View>
-        <View>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeEmail}
-            placeholder="E-posta"
-            placeholderTextColor='gray'
-            value={email}
-          />
-          <View
-            style={[
-              styles.input,
-              {
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              },
-            ]}>
+          <Image source={require('../assets/images/odisea-logo1.png')} />
+          <Text style={styles.titleText}>odisea</Text>
+          <View style={{marginTop:50}}>
             <TextInput
-              style={{fontSize: 20, width: '85%', color:'white'}}
-              onChangeText={onChangePassword}
-              placeholder="Şifre"
+              style={[styles.input, styles.textInput]}
+              onChangeText={onChangeEmail}
+              placeholder="E-posta"
               placeholderTextColor='gray'
-              value={password}
-              textContentType="password"
-              secureTextEntry={!showPassword}
+              value={email}
             />
-            <IconButton
-              icon={showPassword ? 'eye-off-outline' : 'eye-outline'}
-              size={20}
-              iconColor={'gray'}
-              onPress={toggleShowPassword}
-            />
-          </View>
-          <View style={styles.remember}>
-            <Checkbox
-              color="white"
-              status={remember ? 'checked' : 'unchecked'}
-              onPress={onChangeRemember}
-            />
-            <View style={{flex:1, flexDirection:'row', justifyContent:'space-between'}}>
-              <View >
-                <Text style={styles.infoText}> Beni hatırla </Text>
-              </View>
-              <View >
-                <Text style={[styles.infoText, {textDecorationLine: 'underline'}]} onPress={()=>{setForgotModalOpen(true)}}>Şifremi unuttum</Text>
+            <View
+              style={[
+                styles.input, styles.textInput,
+                {
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                },
+              ]}>
+              <TextInput
+                style={{fontSize: 18, width: '85%', color:'white', fontFamily:'Lexend-Light'}}
+                onChangeText={onChangePassword}
+                placeholder="Şifre"
+                placeholderTextColor='gray'
+                value={password}
+                textContentType="password"
+                secureTextEntry={!showPassword}
+              />
+              <IconButton
+                icon={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                size={20}
+                iconColor={'gray'}
+                onPress={toggleShowPassword}
+              />
+            </View>
+            <View style={styles.remember}>
+              <Checkbox
+                color="white"
+                status={remember ? 'checked' : 'unchecked'}
+                onPress={onChangeRemember}
+              />
+              <View style={{flex:1, flexDirection:'row', justifyContent:'space-between'}}>
+                <View >
+                  <Text style={styles.infoText}> Beni hatırla </Text>
+                </View>
+                <View >
+                  <Text style={[styles.infoText, {textDecorationLine: 'underline'}]} onPress={()=>{setForgotModalOpen(true)}}>Şifremi unuttum</Text>
+                </View>
               </View>
             </View>
           </View>
-          {loading ? (
+        </View>
+       
+        <View>
+        {loading ? (
             <ActivityIndicator />
           ) : (
             <CustomButton
               title="Giriş Yap"
               onPress={handleSubmit}
-              fontSize={20}
-              backgroundColor={'slategray'}
+              fontSize={18}
+              backgroundColor={darkTheme.primary}
               style={styles.submitButton}
             />
           )}
+          
 
           <Text style={[styles.infoText, {textDecorationLine: 'underline', textAlign:'center'}]} onPress={handleSignUp}>
             Kaydolmak için tıklayın
           </Text>
         </View>
-        <Portal>
+      </View>
+      <Portal>
           <Modal
             visible={forgotModalOpen}
             onDismiss={()=>{setForgotModalOpen(false)}}
@@ -169,8 +176,7 @@ const Login = ({navigation, route}) => {
               <Button title="Vazgeç" onPress={() => {setForgotModalOpen(false) } } />
             </View>
           </Modal>
-        </Portal>
-      </View>
+      </Portal>
     </PaperProvider>
   );
 };
@@ -180,28 +186,35 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    backgroundColor: 'black',
-    color: 'white',
+    backgroundColor: darkTheme.backgroundColor
   },
   input: {
     width: _screen.width * 0.9,
-    backgroundColor: 'black',
-    fontSize: 20,
+    backgroundColor: darkTheme.backgroundColor,
+    fontSize: 18,
+    fontFamily: 'Lexend-Light',
     marginBottom: 20,
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: 'white',
-    color: 'white'
+    borderColor: darkTheme.borderColor,
+    color: darkTheme.textColor
   },
-  header: {},
+  textInput: {
+    paddingLeft: 8
+  },
+  header: {
+    alignItems:'center'
+  },
   titleText: {
     textAlign: 'center',
     fontSize: 30,
-    color: 'white',
+    color: darkTheme.textColor,
+    fontFamily: 'Lexend-SemiBold'
   },
   infoText: {
-    color: 'white',
+    color: darkTheme.textColor,
     fontSize: 15,
+    fontFamily: 'Lexend-Light'
   },
   remember: {
     flexDirection: 'row',
@@ -211,7 +224,8 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginBottom: 10,
-    height:42
+    height:42,
+    width: _screen.width * 0.9
   },
   modalContainer: {
     margin:30,
@@ -220,10 +234,12 @@ const styles = StyleSheet.create({
     paddingHorizontal:50
 },
 modalHeading: {
-  fontSize: 18
+  fontSize: 18,
+  fontFamily: 'Lexend-Light'
 },
 modalInput: {
-  fontSize: 18
+  fontSize: 18,
+  fontFamily: 'Lexend-Light'
 }
 });
 

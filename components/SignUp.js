@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, Image, Alert, TextInput, Button, ActivityIndicat
 import CustomButton from '../custom-components/CustomButton';
 import {IconButton} from 'react-native-paper';
 import { signUp } from '../firebase';
+import { darkTheme } from '../utils/Theme';
 
 
 const SignUp = ({navigation}) => {
@@ -113,7 +114,7 @@ const SignUp = ({navigation}) => {
               title="Gönder"
               onPress={handleSubmit}
               fontSize={20}
-              backgroundColor={'slategray'}
+              backgroundColor={darkTheme.primary}
               style={styles.submitButton}
             />) 
           }

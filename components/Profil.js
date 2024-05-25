@@ -6,6 +6,7 @@ import { personaMap } from '../utils/ShortNameMaps';
 import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import { auth } from '../firebase';
 import { _screen } from '../utils/Urls';
+import { darkTheme } from '../utils/Theme';
 
 
 const Profil = ({navigation}) => {
@@ -113,8 +114,9 @@ const styles = StyleSheet.create({
    
   },
   text: {
-    color: 'white',
-    fontSize: 18
+    color: darkTheme.textColor,
+    fontSize: 16,
+    fontFamily: 'Lexend-Light'
   },
   centerSection: {
     
@@ -142,8 +144,8 @@ const styles = StyleSheet.create({
     borderRadius: 50
   },
   usernameText: {
-    fontSize: 26,
-    fontWeight: 'bold', 
+    fontSize: 24,
+    fontFamily: 'Lexend-SemiBold',
     color:'white'
   },
 
@@ -164,7 +166,7 @@ const styles = StyleSheet.create({
     width:54,
     height:54,
     borderRadius:27,
-    borderColor: 'firebrick',
+    borderColor: darkTheme.primary,
     borderWidth: 2,
     margin:5
   },
@@ -188,7 +190,8 @@ const styles = StyleSheet.create({
   },
   favoritesText: {
     color: 'black',
-    fontSize: 16,
+    fontSize: 14,
+    fontFamily: 'Lexend-Light',
     paddingLeft: 10 
   },
 

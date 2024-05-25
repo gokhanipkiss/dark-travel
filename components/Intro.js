@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AppIntroSlider from 'react-native-app-intro-slider';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, ImageBackground } from 'react-native';
 
 
 const slides = [
@@ -25,7 +25,8 @@ const slides = [
     {
         key: 'slide4',
         title: 'Gerçeklerle yüzleşmeye hazır mısın?',
-        text: ''
+        text: '',
+        image: require('../assets/images/odisea-logo1.png')
     },
 ];
 
@@ -34,9 +35,9 @@ const Intro = (props) => {
 
     const renderSlide = ({ item }) => {
         return (
-            
-            <View style={styles.slideContainer}>
-                <Image source={item.image} style={styles.image} />
+                        
+            <View style={styles.slideContainer}>                
+                <Image source={item.image} style={(item.key !== 'slide4') ? styles.image : null} />
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.text}>{item.text}</Text>                
                 <Text>
@@ -50,7 +51,7 @@ const Intro = (props) => {
                             <Button title='Done' color={'black'} onPress={handleDone} />
                         </View>
                     } */}
-                </Text>
+                </Text>                
             </View>
            
         );
@@ -89,13 +90,19 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'beige',
-        fontSize: 24,
+        fontSize: 20,
+        textAlign: 'center',
+        fontFamily: 'Lexend-SemiBold',
         marginTop: 16,
+        marginHorizontal:5
     },
     text: {
         color: 'beige',
         fontSize: 16,
+        fontFamily: 'Lexend-SemiBold',
+        textAlign: 'center',
         marginTop: 8,
+        marginHorizontal:5
     },
     buttonContainer: {
         width:200,

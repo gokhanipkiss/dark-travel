@@ -28,8 +28,7 @@ const styles = StyleSheet.create({
     title: {
         marginBottom: 200,
         fontSize: 50,
-        fontFamily: 'sans-serif-condensed',
-        fontWeight: 'bold',
+        fontFamily: 'Lexend-SemiBold',
         color:'black'
     }
 

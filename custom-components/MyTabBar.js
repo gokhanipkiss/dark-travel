@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import HomeIcon from '../assets/icons/home1.svg'
+import { darkTheme } from '../utils/Theme';
 
 const iconMap = {
     Keşfet: 'location-arrow',
@@ -72,17 +73,20 @@ const styles = StyleSheet.create({
   tabBar: {
     flexDirection: 'row',
     backgroundColor: 'black',
-    paddingTop:10
+    paddingVertical:8,
+    
   },
   textFocused: {
-    color: 'firebrick',
+    color: darkTheme.primary,
     textAlign: 'center',
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: 'Lexend-Light'
   },
   text: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: 'Lexend-Light'
   }
 })
 
