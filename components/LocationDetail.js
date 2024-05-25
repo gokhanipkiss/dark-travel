@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { _screen } from '../utils/Urls';
 import { HeaderSection } from './Home';
 import { darkTheme } from '../utils/Theme';
+import { categoryMap } from '../utils/ShortNameMaps';
 
 
 const LocationDetail = ({navigation, route}) => {
@@ -24,7 +25,7 @@ const LocationDetail = ({navigation, route}) => {
             <View style={styles.chipsContainer}>
             {place.categories.map((category,index) => { return (
                 <Chip key={index} style={styles.chip}>
-                    <Text style={[styles.text, {fontSize:10}]}>{category}</Text>
+                    <Text style={[styles.text, {fontSize:10}]}>{categoryMap[category]}</Text>
                 </Chip>                
                 )}
             )
@@ -70,7 +71,7 @@ const LocationDetail = ({navigation, route}) => {
             <HeaderSection titleText='Yararlı Bulunan Tavsiyeler' />
             <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
                 {place.recomm && place.recomm.map((recomm, index) => { return (
-                <Card key={index}>
+                <Card key={index} style={styles.recommCard}>
                     <Text>{recomm.author}</Text>    
                     <Text>{recomm.text}</Text>
                 </Card>
@@ -89,7 +90,7 @@ const LocationDetail = ({navigation, route}) => {
 const styles = StyleSheet.create({
     main: {
         flex:1,
-        backgroundColor: 'black',
+        backgroundColor: darkTheme.backgroundColor,
         justifyContent:'flex-start'
     },
     titleImageContainer: {
@@ -101,14 +102,16 @@ const styles = StyleSheet.create({
         opacity: 0.7
     },
     heading:{
-        fontSize:26,
+        fontSize:24,
         margin:20,
-        textAlign:'center'
+        textAlign:'center',
+        fontFamily: 'Lexend-SemiBold'
     },
     text: {
-        color: 'white',
+        color: darkTheme.textColor,
         textShadowColor: 'black',
-        textShadowRadius: 10
+        textShadowRadius: 10,
+        fontFamily: 'Lexend-Light'
     },
     button: {
         marginVertical: 15,
@@ -144,10 +147,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(40, 40, 40)',
         padding: 10,
       },
-      recommContainer: {
-        padding:10,
-        height:'auto'
-      }
+    recommContainer: {
+      padding: 10,
+      height: 'auto'
+    },
+    recommCard: {
+      padding: 5
+    }
 })
 
 export default LocationDetail;
