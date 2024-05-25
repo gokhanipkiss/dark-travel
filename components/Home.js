@@ -155,7 +155,7 @@ const Home = ({navigation}) => {
                     <Chip
                       key={index}
                       style={item === category ? chipSelected : chip}
-                      textStyle={{fontSize: 16, color: 'white'}}
+                      textStyle={[{fontSize: 14, color: darkTheme.textColor, fontFamily:'Lexend-SemiBold'}]}
                       onPress={() => {
                         handleClickTag(item);
                       }}>
@@ -230,7 +230,7 @@ const Home = ({navigation}) => {
                             ]}>
                               {item.name}
                           </Text>
-                          <Text style={text}> {item.body} </Text>
+                          <Text style={text}>{item.body} </Text>
                         </View>
                       </ImageBackground>
                     </Card>
@@ -280,7 +280,8 @@ const Home = ({navigation}) => {
                                 style={storyChip}
                                 textStyle={{
                                   fontSize: 10,
-                                  color: 'white',
+                                  color: darkTheme.textColor,
+                                  fontFamily: 'Lexend-Light'
                                 }}>
                                 {categoryMap[category]}
                               </Chip>
@@ -301,7 +302,7 @@ const Home = ({navigation}) => {
               style={styles.missionImage}
               source={require('../assets/images/splash.jpg')}
             />
-            <Text style={[text, {textAlign: 'center'}]}>
+            <Text style={[text, {textAlign: 'center', fontSize:14}]}>
               Topluluk liderleri tarafından düzenlenen 10 etkinliğe katıl
             </Text>
             <ProgressBar
@@ -335,7 +336,8 @@ const styles = StyleSheet.create({
     color: 'white',
     textShadowColor: 'rgb(50,50,50)',
     textShadowRadius: 10,
-    fontFamily: 'Lexend-Light'
+    fontFamily: 'Lexend-Light',
+    fontSize:12
   },
   container: {
     flex: 1,
