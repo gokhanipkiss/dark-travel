@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Image, ImageBackground, Button } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, Image, ImageBackground, Button, Linking, Alert, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import CustomButton from '../custom-components/CustomButton';
 import { Card, Chip } from 'react-native-paper';
@@ -12,6 +12,21 @@ import { categoryMap } from '../utils/ShortNameMaps';
 
 const LocationDetail = ({navigation, route}) => {
     const place = route.params.place;
+    
+    const handleOpenMaps = () => {
+      let scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
+      let label = ''
+      let latLong = place.coordinates
+      let url = Platform.select({
+        ios: `${scheme}${label}@${latLong}`,
+        android: `${scheme}${latLong}(${label})`
+      });
+      if (place.coordinates)
+        Linking.openURL(url)
+      else
+        Alert.alert('Hata','Konumun koordinat bilgisi bulunamadı.')
+    }
+    
     return (
       <View style={styles.main}>
         <ScrollView>
@@ -31,10 +46,10 @@ const LocationDetail = ({navigation, route}) => {
             )
             }
             </View>
-            <View style={{flexDirection: 'row', alignItems:'center'}} >
+            <TouchableOpacity style={{flexDirection: 'row', alignItems:'center'}} onPress={handleOpenMaps} >
                 <Icon name="location-on" color='white' size={18} />
-                <Text style={[styles.text, {textDecorationLine:'underline'}]}> Haritada Göster</Text>
-            </View>
+                <Text style={[styles.text, {textDecorationLine:'underline', marginLeft:2}]} >Haritada Göster</Text>
+            </TouchableOpacity>
           </View>
           <View style={[styles.bodyText]}>
             <Text style={[styles.text, {fontSize:14}]}>
@@ -72,7 +87,7 @@ const LocationDetail = ({navigation, route}) => {
             <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
                 {place.recomm && place.recomm.map((recomm, index) => { return (
                 <Card key={index} style={styles.recommCard}>
-                    <Text>{recomm.author}</Text>    
+                    <Text>{recomm.author}</Text>
                     <Text>{recomm.text}</Text>
                 </Card>
                 )})}

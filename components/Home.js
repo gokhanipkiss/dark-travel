@@ -11,6 +11,7 @@ import { categoryMap, personaMap } from '../utils/ShortNameMaps';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { getDocs } from 'firebase/firestore';
 import { darkTheme } from '../utils/Theme';
+import { useIsFocused } from '@react-navigation/native';
 
 
 const Home = ({navigation}) => {
@@ -26,6 +27,8 @@ const Home = ({navigation}) => {
     const [loadingStories, setLoadingStories ] = useState(true);
     const [category, setCategory] = useState(tags[0])
     const [refreshing, setRefreshing] = useState(false)
+
+    const isFocused = useIsFocused();
 
     // async function getUrl() {
     //   try{
@@ -133,7 +136,7 @@ const Home = ({navigation}) => {
             blurRadius={2}
             style={{width: '110%'}}
             imageStyle={{left: -30, bottom: -80, opacity:0.7}}
-            source={userAddnlInfo.value.persona === 'myst' ? require('../assets/images/persona-myst.png') : userAddnlInfo.value.persona === 'hist' ? require('../assets/images/persona-hist.png') : require('../assets/images/persona-adv.png')}>
+            source={(isFocused && userAddnlInfo.value.persona === 'myst') ? require('../assets/images/persona-myst.png') : userAddnlInfo.value.persona === 'hist' ? require('../assets/images/persona-hist.png') : require('../assets/images/persona-adv.png')}>
             <View style={topButtonContainer}></View>
           </ImageBackground>
 

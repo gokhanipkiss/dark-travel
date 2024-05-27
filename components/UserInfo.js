@@ -1,12 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import { Button, SafeAreaView, View, Text, StyleSheet, Image, Alert, TextInput } from 'react-native';
-import { auth, db, getUser } from '../firebase';
+import { auth, db, getUser, storage } from '../firebase';
 import { IconButton, Modal, PaperProvider, Portal } from 'react-native-paper';
 import { userAddnlInfo } from '../App';
 import { doc, setDoc } from 'firebase/firestore';
-import { updateProfile } from 'firebase/auth';
+import { updateCurrentUser, updateProfile } from 'firebase/auth';
 import { darkTheme } from '../utils/Theme';
 import CustomButton from '../custom-components/CustomButton';
+// import DocumentPicker from 'react-native-document-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
+// import RNFS from 'react-native-fs'
+import { getDownloadURL, getStorage, ref, uploadBytes, uploadString } from 'firebase/storage';
 
 
 const UserInfo = ({navigation}) => {       
@@ -81,6 +85,49 @@ const UserInfo = ({navigation}) => {
         setEditValue(value)
     }
 
+    async function handleUploadImage() {
+      try {
+        // const pickedFile = await DocumentPicker.pickSingle({
+        //   type: [DocumentPicker.types.images],
+        // });
+
+        let res = await launchImageLibrary()
+        console.log('%O', res.assets[0])
+        let file = res.assets[0];
+
+        // await RNFS.readFile(pickedFile.uri, 'ascii').then(data => {
+        
+        let id = auth.currentUser.uid;
+        const storageRef = ref(storage, 'avatars/' + id + (file.fileName.split('.')[1]));
+        
+        const response = await fetch(file.uri);
+        const blob = await response.blob();
+
+        // Base64 formatted string
+        //const message2 = '5b6p5Y+344GX44G+44GX44Gf77yB44GK44KB44Gn44Go44GG77yB';
+        // uploadString(storageRef, data, 'raw' ,{contentType:'image/jpeg'}).then((snapshot) => {
+        //   console.log('Uploaded a base64 string!');
+        // });
+
+        uploadBytes(storageRef, blob).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then(url => {
+            updateProfile(auth.currentUser, {
+              photoURL: url
+            })
+            .then(()=>{
+              userAddnlInfo.value.photoURL = url;
+              Alert.alert('Başarı', 'Profil resmi başarıyla değiştirildi.')
+            }
+            ).catch(err => Alert.alert('Hata','Kullanıcı bilgileri güncellenemedi: ' + err))
+          })
+          }
+          ).catch(error => Alert.alert('Hata','Kullanıcı bilgileri güncellenemedi: ' + error))
+      } catch (er) {
+        Alert.alert('Hata', 'Resim yüklenemedi: ' + er);
+      }
+      //TODO : Insert Progress indicator
+    }
+
     return (
       <PaperProvider>
         <View style={styles.main}>
@@ -88,6 +135,8 @@ const UserInfo = ({navigation}) => {
           <InfoLine type="location" heading="Şehir" />
           <InfoLine type="age" heading="Yaş" />
           <InfoLine type="sex" heading="Cinsiyet" />
+
+          <CustomButton title='Profil resmi değiştir' thin backgroundColor={'teal'} onPress={handleUploadImage} style={{width:200, marginTop:30, paddingVertical:10}} />
 
           <Portal>
             <Modal
@@ -148,13 +197,15 @@ const styles = StyleSheet.create({
         borderRadius:10
     },
     modalHeading: {
+      color:'black',
       fontFamily: 'Lexend-SemiBold',
-      marginBottom:5
+      marginBottom: 5
     },
     modalInput: {
       backgroundColor: 'lightgray',
       borderRadius:5,
       fontFamily: 'Lexend-Regular',
+      color: 'black',
       paddingHorizontal:7
     }
 })

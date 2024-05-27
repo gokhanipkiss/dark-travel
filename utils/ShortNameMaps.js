@@ -9,5 +9,14 @@ export const personaMap = {
 export const categoryMap = {
     myst: "Gizemli",
     adv: "Maceralı",
-    hist: "Tarihi"
+    hist: "Tarihi",
+    para: "Paranormal",
+    archeo: "Arkeolojik",
+    undrg: "Yeraltı",
+    grl: "Gerilim",
+    cultr: "Kültürel",
+    art: "Artistik",
+    ntr: "Natural",
+    archt: "Mimari",
+    extr: "Sıradışı"
 }

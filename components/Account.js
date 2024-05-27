@@ -119,12 +119,14 @@ const styles = StyleSheet.create({
     },
     modalHeading: {
       fontFamily: 'Lexend-SemiBold',
+      color: 'black',
       marginBottom:5
     },
     modalInput: {
       backgroundColor: 'lightgray',
       borderRadius:5,
       fontFamily: 'Lexend-Regular',
+      color: 'black',
       paddingHorizontal:7
     }
 })

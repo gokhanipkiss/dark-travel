@@ -5,6 +5,7 @@ import { initializeAuth, getReactNativePersistence, getAuth, createUserWithEmail
 import { getStorage } from "firebase/storage";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from "react-native";
+import { decode } from 'base-64';
 
 
 // Your web app's Firebase configuration
@@ -92,6 +93,10 @@ export const signUp = (email, password, name, city, clearFields, navigation) => 
 
 
 // Storage
+
+if(typeof atob === 'undefined') {
+  global.atob = decode;
+}
 
 export const storage = getStorage();
 

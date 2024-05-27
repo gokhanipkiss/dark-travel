@@ -235,14 +235,16 @@ const styles = StyleSheet.create({
     borderRadius:10
   },
   modalHeading: {
+    color:'black',
     fontFamily: 'Lexend-SemiBold',
     marginBottom:5
   },
   modalInput: {
     backgroundColor: 'lightgray',
-    borderRadius:5,
+    borderRadius: 5,
     fontFamily: 'Lexend-Regular',
-    paddingHorizontal:7
+    paddingHorizontal:7,
+    color: 'black'
   }
 });
 

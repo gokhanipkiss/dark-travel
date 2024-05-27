@@ -26,11 +26,14 @@ const StackMain = () => {
       if (user) {
         isLoggedIn.value = true;
         getUser(auth.currentUser.uid).then(
-            result => {userAddnlInfo.value = result
-              console.log("userInfo: %O", result)
+            result => {
+              userAddnlInfo.value = result
+              //console.log("userInfo: %O", result)
+              userAddnlInfo.value.photoURL = auth.currentUser.photoURL;
+              //console.log("auth state changed")
             }            
-        ).catch(err => console.log(err));
-        // navigationRef.navigate('TabMain')
+        ).catch(err => console.log(err));        
+        // navigationRef.navigate('TabMain')        
         
       } else {
         isLoggedIn.value = false;        

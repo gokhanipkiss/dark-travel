@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Text, StyleSheet, View, SafeAreaView, Image, Touchable, TouchableOpacity, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { userAddnlInfo } from '../App';
@@ -7,9 +7,13 @@ import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import { auth } from '../firebase';
 import { _screen } from '../utils/Urls';
 import { darkTheme } from '../utils/Theme';
+import { useIsFocused } from '@react-navigation/native';
 
 
-const Profil = ({navigation}) => {
+const Profil = ({navigation, route}) => {
+    
+       
+    const isFocused = useIsFocused();   // Bunu jsx içinde kullanmazsak signal değişiminde sayfayı re-render yapmıyor, çok saçma. Redux entegre edicez gibi görünüyor.
 
     function goToSettings(){
         navigation.push('Ayarlar');
@@ -34,7 +38,7 @@ const Profil = ({navigation}) => {
 
         <View style={centerSection}>
           <View style={userInfoCard}>
-            <Image style={avatarImage} source={require('../assets/images/splash.jpg')} />
+            <Image style={avatarImage} source={isFocused ? (userAddnlInfo.value.photoURL ? {uri: userAddnlInfo.value.photoURL} : require('../assets/images/user.jpg')) : ( auth.currentUser.photoURL ? {uri: auth.currentUser.photoURL} : require('../assets/images/user.jpg')  )} />
             <View style={userInfo}>
                 <Text style={usernameText} > {auth.currentUser.displayName}  </Text>
                 <Text style={text}> {userAddnlInfo ? personaMap[userAddnlInfo.value.persona] : ''} </Text>
