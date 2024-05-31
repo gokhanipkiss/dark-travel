@@ -7,17 +7,22 @@ import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import { auth } from '../firebase';
 import { _screen } from '../utils/Urls';
 import { darkTheme } from '../utils/Theme';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const Profil = ({navigation, route}) => {
-    
-       
-    const isFocused = useIsFocused();   // Bunu jsx içinde kullanmazsak signal değişiminde sayfayı re-render yapmıyor, çok saçma. Redux entegre edicez gibi görünüyor.
 
     function goToSettings(){
         navigation.push('Ayarlar');
     }
+
+    useFocusEffect(   // Fotoğraf değiştiğinde re-render yapmak için gerekti
+      React.useCallback(() => {
+        setPhotoURL(userAddnlInfo.value.photoURL)
+      }, [userAddnlInfo.value.photoURL])
+    );
+
+    const [photoURL, setPhotoURL ] = useState(userAddnlInfo.value.photoURL || auth.currentUser.photoURL);
 
     const {container, text, topBar, centerSection, userInfoCard, avatarImage, userInfo, usernameText, badgesSection, badgesTitle,
         badgesContainer, badge, favoritesSection, favoritesCard, favoritesImage, favoritesText, memoriesSection, memoriesCard,
@@ -38,7 +43,9 @@ const Profil = ({navigation, route}) => {
 
         <View style={centerSection}>
           <View style={userInfoCard}>
-            <Image style={avatarImage} source={isFocused ? (userAddnlInfo.value.photoURL ? {uri: userAddnlInfo.value.photoURL} : require('../assets/images/user.jpg')) : ( auth.currentUser.photoURL ? {uri: auth.currentUser.photoURL} : require('../assets/images/user.jpg')  )} />
+            <View style={styles.avatarImageContainer}>
+            <Image style={avatarImage} source={photoURL ? {uri: photoURL} : require('../assets/images/user.jpg')} />
+            </View>
             <View style={userInfo}>
                 <Text style={usernameText} > {auth.currentUser.displayName}  </Text>
                 <Text style={text}> {userAddnlInfo ? personaMap[userAddnlInfo.value.persona] : ''} </Text>
@@ -112,7 +119,7 @@ const styles = StyleSheet.create({
     flex:1,
     alignContent: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: 'black'
+    backgroundColor: darkTheme.backgroundColor
   },
   scrollView: {
    
@@ -142,6 +149,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingLeft: 15
   },
+  avatarImageContainer: {width:100, height:100, borderRadius:50, elevation:10},
   avatarImage: {
     width: 100,
     height: 100,

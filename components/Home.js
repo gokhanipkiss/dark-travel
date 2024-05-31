@@ -149,7 +149,7 @@ const Home = ({navigation}) => {
           </View>
 
           <View style={{paddingLeft:15}}>
-            <ScrollView horizontal style={chipContainer}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={chipContainer}>
               {tags
                 .sort(tag => {
                   return tag === category ? -1 : 1;
@@ -173,7 +173,7 @@ const Home = ({navigation}) => {
             {loadingLocations ? (
               <ActivityIndicator />
             ) : (
-              <ScrollView horizontal style={placesContainer}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={placesContainer}>
                 {locationsFiltered.map((item, index) => {
                   return (
                     <Card key={index} style={locationCard} onPress={()=>{
@@ -202,7 +202,7 @@ const Home = ({navigation}) => {
             {loadingTours ? (
               <ActivityIndicator />
             ) : (
-              <ScrollView horizontal style={placesContainer}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={placesContainer}>
                 {toursFiltered.map((item, index) => {
                   return (
                     <Card key={index} style={tourCard}>
@@ -247,7 +247,7 @@ const Home = ({navigation}) => {
             {loadingStories ? (
               <ActivityIndicator />
             ) : (
-              <ScrollView horizontal style={placesContainer}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={placesContainer}>
                 {storiesFiltered.map((item, index) => {
                   return (
                     <Card key={index} style={storyCard}>
@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Lexend-SemiBold'
   },
   placesContainer: {
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   locationCard: {
     borderRadius: 10,

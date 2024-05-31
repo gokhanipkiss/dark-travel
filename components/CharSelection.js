@@ -69,7 +69,8 @@ const CharSelection = ({navigation}) => {
         backgroundColor={selectedOption === '' ? 'dimgray' : darkTheme.primary}
         fontSize={18}
         style={button}
-        onPress={selectedOption === '' ? null : handleSubmit}
+        disabled={selectedOption === ''}
+        onPress={handleSubmit}
       />
       <Text style={[text, {fontSize: 16}]}>
         Karar veremedin mi? {' '}

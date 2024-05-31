@@ -18,6 +18,7 @@ const UserInfo = ({navigation}) => {
     const [modalOpen, setModalOpen ] = useState(false);
     const [editProperty, setEditProperty] = useState('');
     const [editValue, setEditValue ] = useState('');
+    const [uploading, setUploading ] = useState(false);
 
     const InfoLine = (props) => {
         return (
@@ -92,36 +93,44 @@ const UserInfo = ({navigation}) => {
         // });
 
         let res = await launchImageLibrary()
-        console.log('%O', res.assets[0])
-        let file = res.assets[0];
+        
 
         // await RNFS.readFile(pickedFile.uri, 'ascii').then(data => {
         
-        let id = auth.currentUser.uid;
-        const storageRef = ref(storage, 'avatars/' + id + (file.fileName.split('.')[1]));
-        
-        const response = await fetch(file.uri);
-        const blob = await response.blob();
+        if (res && !res.didCancel){
+          setUploading(true)
+          let file = res.assets[0];
+          let id = auth.currentUser.uid;
+          const storageRef = ref(storage, 'avatars/' + id + (file.fileName.split('.')[1]));
+          
+          const response = await fetch(file.uri);
+          const blob = await response.blob();
 
-        // Base64 formatted string
-        //const message2 = '5b6p5Y+344GX44G+44GX44Gf77yB44GK44KB44Gn44Go44GG77yB';
-        // uploadString(storageRef, data, 'raw' ,{contentType:'image/jpeg'}).then((snapshot) => {
-        //   console.log('Uploaded a base64 string!');
-        // });
+          // Base64 formatted string
+          //const message2 = '5b6p5Y+344GX44G+44GX44Gf77yB44GK44KB44Gn44Go44GG77yB';
+          // uploadString(storageRef, data, 'raw' ,{contentType:'image/jpeg'}).then((snapshot) => {
+          //   console.log('Uploaded a base64 string!');
+          // });
 
-        uploadBytes(storageRef, blob).then((snapshot) => {
-          getDownloadURL(snapshot.ref).then(url => {
-            updateProfile(auth.currentUser, {
-              photoURL: url
+          uploadBytes(storageRef, blob).then((snapshot) => {
+            getDownloadURL(snapshot.ref).then(url => {
+              updateProfile(auth.currentUser, {
+                photoURL: url
+              })
+              .then(()=>{
+                userAddnlInfo.value.photoURL = url;
+                Alert.alert('Başarı', 'Profil resmi başarıyla değiştirildi.')
+                setUploading(false);
+              }
+              ).catch(err => Alert.alert('Hata','Kullanıcı bilgileri güncellenemedi: ' + err))
             })
-            .then(()=>{
-              userAddnlInfo.value.photoURL = url;
-              Alert.alert('Başarı', 'Profil resmi başarıyla değiştirildi.')
             }
-            ).catch(err => Alert.alert('Hata','Kullanıcı bilgileri güncellenemedi: ' + err))
-          })
-          }
-          ).catch(error => Alert.alert('Hata','Kullanıcı bilgileri güncellenemedi: ' + error))
+            ).catch(error => Alert.alert('Hata','Kullanıcı bilgileri güncellenemedi: ' + error))
+        }
+        else if (res && res.errorMessage){
+          Alert.alert('Hata', errorMessage)
+        }
+
       } catch (er) {
         Alert.alert('Hata', 'Resim yüklenemedi: ' + er);
       }
@@ -136,7 +145,7 @@ const UserInfo = ({navigation}) => {
           <InfoLine type="age" heading="Yaş" />
           <InfoLine type="sex" heading="Cinsiyet" />
 
-          <CustomButton title='Profil resmi değiştir' thin backgroundColor={'teal'} onPress={handleUploadImage} style={{width:200, marginTop:30, paddingVertical:10}} />
+          <CustomButton disabled={uploading} title={uploading ? 'Yükleniyor... ' : 'Profil resmi değiştir'} thin backgroundColor={uploading ? '#00e6e6' : 'teal'} onPress={handleUploadImage} style={{width:200, marginTop:30, paddingVertical:10}} />
 
           <Portal>
             <Modal
