@@ -6,8 +6,14 @@ Home page üst tuşlar
 
 Home search bar işlevi
 
+Plan oluşturma görüntüleme 
+
 Horizontal scroll bug'ı (tek sayfadan az içerik olduğunda + pagingEnabled olduğunda)
 
-User avatarlar
+Alert'leri güzelleştirme
 
-Font dene
+light theme
+
+svg import etme
+
+error handling her yerde

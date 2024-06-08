@@ -12,6 +12,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth, getUser } from './firebase';
 import CharSelection from './components/CharSelection';
 import LocationDetail from './components/LocationDetail';
+import Notifications from './components/Notifications';
 
 
 const StackMain = () => {
@@ -82,6 +83,10 @@ const StackMain = () => {
               <Stack.Screen
                 name="Hesap ve Güvenlik"
                 component={Account}
+              />
+              <Stack.Screen
+                name="Bildirimler"
+                component={Notifications}
               />
             </>
           

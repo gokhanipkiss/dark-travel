@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { collection, getFirestore, getDocs, setDoc, doc, getDoc } from 'firebase/firestore' 
+import { collection, getFirestore, getDocs, setDoc, doc, getDoc, addDoc } from 'firebase/firestore' 
 import { initializeAuth, getReactNativePersistence, getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -42,17 +42,34 @@ export const signUp = (email, password, name, city, clearFields, navigation) => 
             (credentials) => {
              updateProfile(auth.currentUser, {
               displayName: name
-            });
+            }).catch(err => console.log("Hata: " + err));
+
              setDoc(doc(db, 'users', auth.currentUser.uid), {
               location: city,
               friendCount: 0,
-              badges: []
-            });
+              badges: [],
+              // notifications: [
+              //   {   
+              //       title: "Odisea'ya hoşgeldiniz!",
+              //       body: "Ekibimiz size iyi eğlenceler diler.",
+              //       unread: true,
+              //       date: new Date()
+              //   }
+              // ]
+            }).then(() =>
+              addDoc(collection(db, 'users/' + auth.currentUser.uid + '/notifications'),
+                {
+                  title: "Merhaba!",
+                  body: "Odisea'ya hoşgeldiniz. Ekibimiz size iyi seyahatler diler.",
+                  unread: true,
+                  date: new Date()
+                }
+              )
+              ).catch(err => console.log("Hata: " + err) );
             
-            Alert.alert("Başarı", "Kullanıcı başarıyla kaydedildi." /* , signUpSuccessButton */ )
             clearFields();
             navigation.navigate('CharSelection')
-
+            Alert.alert("Başarı", "Kullanıcı başarıyla kaydedildi.", [{text:'Tamam', onPress:() => {}}] )
         }
     ).catch(err => {
         if (err.toString().includes("weak-password"))

@@ -24,7 +24,9 @@ const CharSelection = ({navigation}) => {
     userAddnlInfo.value.persona = selectedOption, // We won't wait for getting it from Firebase because it responds slowly
     setDoc(doc(db, 'users', auth.currentUser.uid), {
         persona: selectedOption
-      })
+      },
+      {mergeFields: true}  // Çok önemli! Yoksa tüm alanları silip objeyi buna dönüştürüyor
+      )
       .catch(err=>
         Alert.alert('Hata', err.toString())
       ).finally(        

@@ -5,16 +5,15 @@ import { ActivityIndicator, Card, Chip, ProgressBar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { tags } from '../utils/Tags';
 import { userAddnlInfo} from '../App';
-import {  getUser, storage, auth, placesRef, toursRef, storiesRef } from '../firebase';
-import { _screen, baseUrl, storageTokens, storageUris, storageUrls, thumbTokens, thumbUris } from '../utils/Urls';
+import {  auth, placesRef, toursRef, storiesRef, db } from '../firebase';
+import { _screen } from '../utils/Urls';
 import { categoryMap, personaMap } from '../utils/ShortNameMaps';
-import { getDownloadURL, ref } from 'firebase/storage';
-import { getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { darkTheme } from '../utils/Theme';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 
-const Home = ({navigation}) => {
+const Home = ({navigation, route}) => {
 
     const [locations, setLocations] = useState([]);
     const [locationsFiltered, setLocationsFiltered] = useState([])
@@ -25,27 +24,31 @@ const Home = ({navigation}) => {
     const [loadingLocations, setLoadingLocations ] = useState(true);
     const [loadingTours, setLoadingTours ] = useState(true);
     const [loadingStories, setLoadingStories ] = useState(true);
+    const [notifications, setNotifications ] = useState([]);  // only unread notifications actually
     const [category, setCategory] = useState(tags[0])
     const [refreshing, setRefreshing] = useState(false)
+    const [persona, setPersona ] = useState(userAddnlInfo.value.persona);
+    
 
-    const isFocused = useIsFocused();
+    useFocusEffect(
+      React.useCallback(()=>{
+        getNotifications()
+      }, [route]
+      )
+    )
 
-    // async function getUrl() {
-    //   try{
-    //   let result = await getDownloadURL(ref(storage, storageUrls.locations.manyetikYolThumb));
-    //   console.log("url: " , result)
-    //   }
-    //   catch(err){
-    //     console.log(err)
-    //   }
-        
-    // }
-
-    useEffect(() => {               
+    useFocusEffect(
+      React.useCallback(()=>{
+        setPersona(userAddnlInfo.value.persona)
+      }, [userAddnlInfo.value.persona]
+      )
+    )
+    
+    useEffect(() => {         // Apparently this does not run on each navigate between tabs, but the above ones do        
         getStories()
         getLocations()
         getTours()
-        //getUrl()
+        getNotifications()
     }, []);
 
     useEffect(()=> {
@@ -86,6 +89,21 @@ const Home = ({navigation}) => {
         .finally(setLoadingStories(false));
     };
 
+    const getNotifications = () => {
+      getDocs(collection(db, 'users/' + auth.currentUser.uid + '/notifications'))
+        .then(snapshot => {
+          let arr = []
+          snapshot.forEach(
+            s => {
+              if(s.data().unread)
+                arr.push(s.data())
+            }
+          )
+          setNotifications(arr)
+        })
+        .catch(err => console.log(err.toString()));
+    }
+
     function handleClickTag(title) {
         setCategory(title)
 
@@ -119,7 +137,7 @@ const Home = ({navigation}) => {
 
      useEffect(() => {
        if (refreshing){ 
-        Promise.all([getLocations(), getStories(), getTours()]).finally(setRefreshing(false))
+        Promise.all([getLocations(), getStories(), getTours(), getNotifications()]).finally(setRefreshing(false))
        }        
      }, [refreshing]);
 
@@ -136,8 +154,16 @@ const Home = ({navigation}) => {
             blurRadius={2}
             style={{width: '110%'}}
             imageStyle={{left: -30, bottom: -80, opacity:0.7}}
-            source={(isFocused && userAddnlInfo.value.persona === 'myst') ? require('../assets/images/persona-myst.png') : userAddnlInfo.value.persona === 'hist' ? require('../assets/images/persona-hist.png') : require('../assets/images/persona-adv.png')}>
-            <View style={topButtonContainer}></View>
+            source={(persona === 'myst') ? require('../assets/images/persona-myst.png') : persona === 'hist' ? require('../assets/images/persona-hist.png') : require('../assets/images/persona-adv.png')}>
+            <View style={topButtonContainer}>
+              <Image source={require('../assets/images/odisea-logo1.png')} style={{width:28, height:40, marginBottom:4}} resizeMode='contain' />
+              <View>
+                <Text style={[text]} onPress={() => {navigation.push('Bildirimler')}}>
+                  <Icon name={'notifications-none'} size={36} style={{position:'absolute', top:0, left:0}} />
+                </Text>
+                {notifications.length > 0 && <View style={styles.blueDot}></View> }
+              </View>
+            </View>
           </ImageBackground>
 
           <View style={searchBarContainer}>
@@ -352,7 +378,12 @@ const styles = StyleSheet.create({
     width: _screen.width
   },
   topButtonContainer: {
-    height: 80
+    height: 70,
+    width: '90%',
+    paddingHorizontal:10,
+    flexDirection:'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between'
   },
   searchBarContainer: {
     width: '100%',
@@ -364,7 +395,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: 'Lexend-SemiBold',
     color: 'white',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   searchBar: {
     flexDirection: 'row',
@@ -509,6 +540,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
+  blueDot:{
+    backgroundColor: darkTheme.primary, 
+    width:12, 
+    height:12, 
+    position:'absolute', 
+    left:2, 
+    top:2, 
+    borderRadius:6
+  }
 });
 
 export default Home;
