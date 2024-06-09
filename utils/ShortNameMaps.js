@@ -18,5 +18,6 @@ export const categoryMap = {
     art: "Artistik",
     ntr: "Natural",
     archt: "Mimari",
-    extr: "Sıradışı"
+    extr: "Sıradışı",
+    trend: "Trend"
 }

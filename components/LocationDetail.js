@@ -8,10 +8,31 @@ import { _screen } from '../utils/Urls';
 import { HeaderSection } from './Home';
 import { darkTheme } from '../utils/Theme';
 import { categoryMap } from '../utils/ShortNameMaps';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db, getUser } from '../firebase';
 
 
 const LocationDetail = ({navigation, route}) => {
     const place = route.params.place;
+    const [recommendations, setRecommendations ] = useState([]);
+
+    useEffect(() => {
+      const q = query(collection(db, 'recommendations'), where('locationId', '==', place.id))
+      getDocs(q).then(snapshot => {
+        let arr = []
+        snapshot.forEach(s => 
+          {
+            let obj = {...s.data()}            
+            getUser(s.data().authorId).then(res => {
+              obj.photoURL = res.photoURL
+              obj.userName = res.displayName
+              arr.push(obj)
+              setRecommendations(arr)
+              })
+          })
+      }
+      )
+    }, []);
     
     const handleOpenMaps = () => {
       let scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
@@ -83,15 +104,18 @@ const LocationDetail = ({navigation, route}) => {
             </View>
           </View>
           <View style={styles.recommContainer}>
-            <HeaderSection titleText='Yararlı Bulunan Tavsiyeler' />
-            <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
-                {place.recomm && place.recomm.map((recomm, index) => { return (
-                <Card key={index} style={styles.recommCard}>
-                    <Text>{recomm.author}</Text>
-                    <Text>{recomm.text}</Text>
-                </Card>
-                )})}
-            </ScrollView>
+            <HeaderSection titleText='Yararlı Bulunan Tavsiyeler' />            
+              {recommendations.length > 0 && recommendations.map((recomm, index) => { return (
+              <View key={index} style={styles.recommCard}>                    
+                <View>
+                  <Image style={styles.recommAvatar} source={recomm.photoURL ? {uri: recomm.photoURL} : require('../assets/images/user.jpg')} />
+                </View>
+                <View>
+                  <Text style={[styles.recommText, {fontWeight:'bold'}]}>{recomm.userName}</Text>
+                  <Text style={styles.recommText}>{recomm.body}</Text>
+                </View>
+              </View>
+              )})}            
           </View>  
           
 
@@ -125,7 +149,7 @@ const styles = StyleSheet.create({
     text: {
         color: darkTheme.textColor,
         textShadowColor: 'black',
-        textShadowRadius: 10,
+        textShadowRadius: 5,
         fontFamily: 'Lexend-Light'
     },
     button: {
@@ -167,7 +191,24 @@ const styles = StyleSheet.create({
       height: 'auto'
     },
     recommCard: {
-      padding: 5
+      backgroundColor:'white',
+      borderRadius:10,
+      width:'100%',
+      flexDirection:'row',
+      padding: 5,
+      justifyContent:'flex-start',
+      alignItems: 'center'
+    },
+    recommText: {
+      fontFamily: 'Lexend-Regular',
+      color: 'black',
+      lineHeight:20
+    },
+    recommAvatar: {
+      width:48,
+      height:48,
+      borderRadius:24,
+      marginRight:10
     }
 })
 

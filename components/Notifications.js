@@ -33,7 +33,6 @@ const Notifications = ({navigation}) => {
           }
         )
         setNotifications(arr)
-        console.log('array: %O', arr)
       })
       .catch(err => console.log(err.toString()));
       }

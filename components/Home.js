@@ -60,8 +60,13 @@ const Home = ({navigation, route}) => {
       let arr = []
       return getDocs(placesRef)
         .then(result => {
-          result.docs.map(doc => arr.push(doc.data()));
+          result.docs.map(doc => {
+            let obj = {...doc.data()}   // Because this damn firestore holds the id outside the table!
+            obj.id = doc.id;
+            arr.push(obj)
+          });
           setLocations(arr);
+          //console.log('locations: %O', arr)
         })
         .catch(err => console.log(err.toString()))
         .finally(setLoadingLocations(false));
@@ -412,6 +417,7 @@ const styles = StyleSheet.create({
   textInput: {
     width: '100%',
     fontSize: 18,
+    color: 'black'
   },
   chipContainer: {
     paddingVertical: 10,

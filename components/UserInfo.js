@@ -119,8 +119,11 @@ const UserInfo = ({navigation}) => {
               })
               .then(()=>{
                 userAddnlInfo.value.photoURL = url;
-                Alert.alert('Başarı', 'Profil resmi başarıyla değiştirildi.')
-                setUploading(false);
+                setDoc(doc(db,'users',auth.currentUser.uid), {photoURL: url}, {mergeFields: true}).then(() =>
+                {
+                  Alert.alert('Başarı', 'Profil resmi başarıyla değiştirildi.')
+                  setUploading(false);
+                })
               }
               ).catch(err => Alert.alert('Hata','Kullanıcı bilgileri güncellenemedi: ' + err))
             })
