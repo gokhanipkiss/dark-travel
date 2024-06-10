@@ -25,7 +25,7 @@ const CharSelection = ({navigation}) => {
     setDoc(doc(db, 'users', auth.currentUser.uid), {
         persona: selectedOption
       },
-      {mergeFields: true}  // Çok önemli! Yoksa tüm alanları silip objeyi buna dönüştürüyor
+      {merge: true}  // Çok önemli! Yoksa tüm alanları silip objeyi buna dönüştürüyor
       )
       .catch(err=>
         Alert.alert('Hata', err.toString())

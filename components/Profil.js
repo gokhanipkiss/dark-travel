@@ -8,6 +8,7 @@ import { auth } from '../firebase';
 import { _screen } from '../utils/Urls';
 import { darkTheme } from '../utils/Theme';
 import { useFocusEffect } from '@react-navigation/native';
+import { isNullOrEmpty } from '../utils/Methods';
 
 
 const Profil = ({navigation, route}) => {
@@ -44,7 +45,7 @@ const Profil = ({navigation, route}) => {
         <View style={centerSection}>
           <View style={userInfoCard}>
             <View style={styles.avatarImageContainer}>
-            <Image style={avatarImage} source={photoURL ? {uri: photoURL} : require('../assets/images/user.jpg')} />
+            <Image style={avatarImage} source={!isNullOrEmpty(photoURL) ? {uri: photoURL} : require('../assets/images/user.jpg')} />
             </View>
             <View style={userInfo}>
                 <Text style={usernameText} > {auth.currentUser.displayName}  </Text>

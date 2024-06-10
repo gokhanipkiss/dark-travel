@@ -3,7 +3,7 @@ import { Button, SafeAreaView, View, Text, StyleSheet, Image, Alert, TextInput }
 import { auth, db, getUser, storage } from '../firebase';
 import { IconButton, Modal, PaperProvider, Portal } from 'react-native-paper';
 import { userAddnlInfo } from '../App';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { updateCurrentUser, updateProfile } from 'firebase/auth';
 import { darkTheme } from '../utils/Theme';
 import CustomButton from '../custom-components/CustomButton';
@@ -119,13 +119,15 @@ const UserInfo = ({navigation}) => {
               })
               .then(()=>{
                 userAddnlInfo.value.photoURL = url;
-                setDoc(doc(db,'users',auth.currentUser.uid), {photoURL: url}, {mergeFields: true}).then(() =>
+                updateDoc(doc(db,'users',auth.currentUser.uid), 'photoURL', url).then(() =>
                 {
                   Alert.alert('Başarı', 'Profil resmi başarıyla değiştirildi.')
-                  setUploading(false);
                 })
               }
-              ).catch(err => Alert.alert('Hata','Kullanıcı bilgileri güncellenemedi: ' + err))
+              ).catch(err => Alert.alert('Hata','Kullanıcı bilgileri güncellenemedi: ' + err)
+              ).finally(
+                () => setUploading(false)
+              )
             })
             }
             ).catch(error => Alert.alert('Hata','Kullanıcı bilgileri güncellenemedi: ' + error))

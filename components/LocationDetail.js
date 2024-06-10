@@ -4,17 +4,19 @@ import { ScrollView } from 'react-native-gesture-handler';
 import CustomButton from '../custom-components/CustomButton';
 import { Card, Chip } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { _screen } from '../utils/Urls';
+import { _screen, _window } from '../utils/Urls';
 import { HeaderSection } from './Home';
 import { darkTheme } from '../utils/Theme';
 import { categoryMap } from '../utils/ShortNameMaps';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db, getUser } from '../firebase';
 
+const detailContainerPadding = 10;
 
 const LocationDetail = ({navigation, route}) => {
     const place = route.params.place;
     const [recommendations, setRecommendations ] = useState([]);
+    const [detailPage, setDetailPage ] = useState(0);
 
     useEffect(() => {
       const q = query(collection(db, 'recommendations'), where('locationId', '==', place.id))
@@ -79,28 +81,30 @@ const LocationDetail = ({navigation, route}) => {
           </View>
           <View style={styles.detailsContainer}>
             <Text style={[styles.text, {fontSize:20}]}>Hikayenin Detaylarına Göz At</Text>
-            <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
+            <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} 
+                        onMomentumScrollEnd={(event)=>(
+                           setDetailPage( Math.floor(event.nativeEvent.contentOffset.x / (_window.width-detailContainerPadding*2 - 0.001)) )
+                           ) } >
                 <View style={{flexDirection:'row', paddingVertical:10}}>
                     <Image source={{uri: place.detail1Url}} width={_screen.width * 0.35} style={{borderRadius:10}} />
                     <Text style={[styles.text, styles.bodyText, {width: _screen.width * 0.57}]}>{place.detail1}</Text>
-                    
                 </View>
-                             
+
                 {place.detail2 !== '' && (
                 <View style={{flexDirection:'row', paddingVertical:10}}>
-                    {place.detail2Url !== '' && <Image source={{uri: place.detail2Url}} width={_screen.width * 0.35} style={{borderRadius:10}} />}
+                    {place.detail1Url !== '' && <Image source={{uri: place.detail1Url}} width={_screen.width * 0.35} style={{borderRadius:10}} />}
                     <Text style={[styles.text, styles.bodyText, {width: _screen.width * 0.57}]}>{place.detail2}</Text>
                 </View>)}
                 {place.detail3 !== '' && (
                 <View style={{flexDirection:'row', paddingVertical:10}}>
-                    {place.detail3Url !== '' && <Image source={{uri: place.detail3Url}} width={_screen.width * 0.35} style={{borderRadius:10}} />}
+                    {place.detail3Url !== '' && <Image source={{uri: place.detail1Url}} width={_screen.width * 0.35} style={{borderRadius:10}} />}
                     <Text style={[styles.text, styles.bodyText, {width: _screen.width * 0.57}]}>{place.detail3}</Text>
                 </View>)}
             </ScrollView>
             <View style={{flexDirection:'row', justifyContent:'center'}}>
-                        <Icon name='circle' color='white'/>
-                        {place.detail2 && (place.detail2 !== '') && (<Icon name='circle' color='dimgray' />)}
-                        {place.detail3 && (place.detail3 !== '') && (<Icon name='circle' color='dimgray' />)}
+                        <Icon name='circle' color={detailPage === 0 ? 'white' : 'dimgray'} />
+                        {place.detail2 && (place.detail2 !== '') && (<Icon name='circle' color={detailPage === 1 ? 'white' : 'dimgray'} />)}
+                        {place.detail3 && (place.detail3 !== '') && (<Icon name='circle' color={detailPage === 2 ? 'white' : 'dimgray'} />)}
             </View>
           </View>
           <View style={styles.recommContainer}>
@@ -110,9 +114,9 @@ const LocationDetail = ({navigation, route}) => {
                 <View>
                   <Image style={styles.recommAvatar} source={recomm.photoURL ? {uri: recomm.photoURL} : require('../assets/images/user.jpg')} />
                 </View>
-                <View>
+                <View style={{width:'85%', paddingRight:5}}>
                   <Text style={[styles.recommText, {fontWeight:'bold'}]}>{recomm.userName}</Text>
-                  <Text style={styles.recommText}>{recomm.body}</Text>
+                  <Text style={styles.recommText} >{recomm.body}</Text>
                 </View>
               </View>
               )})}            
@@ -184,7 +188,8 @@ const styles = StyleSheet.create({
     detailsContainer: {
         height: 'auto',
         backgroundColor: 'rgb(40, 40, 40)',
-        padding: 10,
+        padding: detailContainerPadding,
+        width:'100%'
       },
     recommContainer: {
       padding: 10,
@@ -202,7 +207,7 @@ const styles = StyleSheet.create({
     recommText: {
       fontFamily: 'Lexend-Regular',
       color: 'black',
-      lineHeight:20
+      lineHeight:20,
     },
     recommAvatar: {
       width:48,

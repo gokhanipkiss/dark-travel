@@ -48,7 +48,8 @@ export const signUp = (email, password, name, city, clearFields, navigation) => 
               location: city,
               friendCount: 0,
               badges: [],
-              displayName: auth.currentUser.displayName
+              displayName: name,
+              photoURL: ''
               // notifications: [
               //   {   
               //       title: "Odisea'ya hoşgeldiniz!",
