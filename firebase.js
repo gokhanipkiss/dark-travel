@@ -28,6 +28,7 @@ export const db = getFirestore()
 export const placesRef = collection(db, 'places')
 export const toursRef = collection(db, 'tours')
 export const storiesRef = collection(db, 'stories')
+export const plansRef = collection(db, 'plans')
 const usersRef = collection(db, 'users')
 
 

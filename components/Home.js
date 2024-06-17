@@ -200,7 +200,7 @@ const Home = ({navigation, route}) => {
                 })}
             </ScrollView>
 
-            <HeaderSection titleText="Rotanı Belirleyecek Konumlar" />
+            <HeaderSection titleText="Rotanı Belirleyecek Konumlar" rightArrow />
             {loadingLocations ? (
               <ActivityIndicator />
             ) : (
@@ -228,7 +228,7 @@ const Home = ({navigation, route}) => {
               </ScrollView>
             )}
 
-            <HeaderSection titleText="Kaşiflerin Birleştiği Turlar" />
+            <HeaderSection titleText="Kaşiflerin Birleştiği Turlar" rightArrow />
 
             {loadingTours ? (
               <ActivityIndicator />
@@ -274,7 +274,7 @@ const Home = ({navigation, route}) => {
               </ScrollView>
             )}
 
-            <HeaderSection titleText="Karanlık Hikayeler" />
+            <HeaderSection titleText="Karanlık Hikayeler" rightArrow />
             {loadingStories ? (
               <ActivityIndicator />
             ) : (
@@ -361,7 +361,7 @@ export const HeaderSection = (props) => { return (
     <View style={styles.placesHeader}>
     <Text style={styles.sectionTitle} onPress={props.onPress}> {props.titleText} </Text>
     <Text style={styles.sectionTitle}>
-      <Icon name="chevron-right" color="white" size={26} />
+      {props.rightArrow && <Icon name="chevron-right" color="white" size={26} /> }
     </Text>
   </View>
 )}
