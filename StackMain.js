@@ -13,6 +13,7 @@ import { auth, getUser } from './firebase';
 import CharSelection from './components/CharSelection';
 import LocationDetail from './components/LocationDetail';
 import Notifications from './components/Notifications';
+import Plan from './components/Plan';
 
 
 const StackMain = () => {
@@ -87,6 +88,11 @@ const StackMain = () => {
               <Stack.Screen
                 name="Bildirimler"
                 component={Notifications}
+              />
+              <Stack.Screen
+                name="Plan"
+                component={Plan}
+                options={{headerShown: false}}
               />
             </>
           

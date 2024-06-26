@@ -8,8 +8,9 @@ import { Timestamp, collection, doc, getDoc, getDocs } from 'firebase/firestore'
 import { db, placesRef, plansRef, toursRef } from '../firebase';
 import CustomButton from '../custom-components/CustomButton';
 import { darkTheme } from '../utils/Theme';
+import { isNullOrEmpty } from '../utils/Methods';
 
-const Planlar = () => {
+const Planlar = ({navigation}) => {           // TODO : Make this page reload when navigated to it
 
     const [locations, setLocations] = useState([]);    
     const [tours, setTours] = useState([]);
@@ -49,22 +50,26 @@ const Planlar = () => {
         let arr = []
         getDocs(plansRef)
           .then(result => {
-            result.docs.map(docm => {
+            result.docs.map((docm, index) => {
               let obj = {...docm.data()}
               obj.id = docm.id;
-              getDoc(doc(db, 'places/' + obj.routeIds[0])).then(   // Because this damn firestore does not return collections of a document in .data()!
-                (res) => {
-                    obj.picUrl = res.data().thumbUrl
-                    arr.push(obj)
-                    setPlans(arr)
-                    console.log(arr)
-                }
-              ).catch(err => console.log(err))
-            })            
+              arr.push(obj)
+              if (index === result.docs.length - 1)
+                setPlans(arr)
+            //   getDoc(doc(db, 'places/' + obj.routeIds[0])).then(   // Because this damn firestore does not return collections of a document in .data()!
+            //     (res) => {
+            //         let picUrl = res.data().thumbUrl
+            //         arrUrls[obj.id] = picUrl
+            //         setPicUrls({...picUrls, arrUrls})
+            //     }
+            //   ).catch(err => console.log(err))
+            });
+            
           })
           .catch(err => console.log(err.toString()))
-          .finally(setLoadingPlans(false));
-
+          .finally(()=> {
+            setLoadingPlans(false)
+        });
       }
 
     useEffect(() => {
@@ -84,13 +89,13 @@ const Planlar = () => {
                   (
                     plans.map(
                         (item, index) => { return (
-                            <View style={styles.planCard} >
+                            <View key={index} style={styles.planCard} >
                                 <View >
-                                    <Image style={styles.planImage} source={item.picUrl ? {uri:item.picUrl} : require('../assets/images/image-not-found.png')} />
+                                    <Image style={styles.planImage} source={!isNullOrEmpty(item.planPicUrl) ? {uri: item.planPicUrl} : require('../assets/images/image-not-found.png')} />
                                 </View>
                                 <View style={styles.planRight}>
                                     <Text style={styles.planTitle}> {item.name} </Text>
-                                    <Text style={styles.text}> { item.startDate.toDate().toDateString() } - { item.endDate.toDate().toDateString() } </Text>
+                                    <Text style={styles.text}> { !isNullOrEmpty(item.startDate) ? item.startDate.toDate().toDateString() : 'Belirsiz tarih' } - { isNullOrEmpty(item.endDate) ? 'Belirsiz tarih' : item.endDate.toDate().toDateString() } </Text>
                                 </View>
                             </View> )
                         }
@@ -98,7 +103,7 @@ const Planlar = () => {
                   )
                 }
 
-                <CustomButton title={'Yeni Plan Oluştur'} backgroundColor={darkTheme.primary} />
+                <CustomButton title={'Yeni Plan Oluştur'} backgroundColor={darkTheme.primary} onPress={()=>navigation.push('Plan')} />
                 
                 <HeaderSection titleText="Beğenebileceğin Öneriler" />
                 {loadingLocations ? (
