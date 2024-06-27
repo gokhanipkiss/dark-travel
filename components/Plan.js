@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { TextInput, View, Text, StyleSheet, Image, Button, ScrollView, ImageBackground } from 'react-native';
+import { TextInput, View, Text, StyleSheet, Image, Button, ScrollView, ImageBackground, Alert } from 'react-native';
 import { darkTheme } from '../utils/Theme';
 import CustomButton from '../custom-components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -56,7 +56,7 @@ const Plan = ({navigation}) => {
     const handleRollDice = () => {
         let arr = Object.keys(categoryMap);
         let result = [];
-        let maxCount = Math.floor(Math.random()*6);
+        let maxCount = Math.ceil(Math.random()*6);
         for (i = 0; i < maxCount; i++){
             let key = arr[Math.floor(Math.random() * arr.length)];
             result.push(key)
@@ -268,7 +268,7 @@ const Plan = ({navigation}) => {
                     </View>
                     <View>
                         { addedStops.map((item, index) => {return (
-                            <View style={styles.suggestionContainer}>
+                            <View key={index} style={styles.suggestionContainer}>
                             <Image source={{uri:item.thumbUrl}} style={styles.typeImage} />
                             <View style={{width:'60%'}}>
                                 <Text style={{color: 'black', fontFamily: darkTheme.fontRegular}} >
@@ -280,6 +280,13 @@ const Plan = ({navigation}) => {
                                 <Text style={[styles.text, {color:'black'}]} numberOfLines={2}>
                                     {item.body}
                                 </Text>
+                                <View style={{flexDirection:'row', marginTop:5}}>
+                                    { item.categories.map((i, ind) => {return (
+                                        <Chip key={ind} style={styles.locationChip}>
+                                            <Text style={[styles.text, {fontSize:12, lineHeight:13}]}>{categoryMap[i]}</Text>
+                                        </Chip>
+                                    )})}
+                                </View>
                             </View>
                             <Icon name='close' size={30} style={{alignSelf:'center'}} onPress={()=>removeStop(item)} />
                         </View>
@@ -301,12 +308,53 @@ const Plan = ({navigation}) => {
                                     <Text style={[styles.text, {color:'black'}]} numberOfLines={2}>
                                         {item.body}
                                     </Text>
+                                    <View style={{flexDirection:'row', marginTop:5}} >
+                                        { item.categories.map((i, ind) => {return (
+                                            <Chip key={ind} style={styles.locationChip}>
+                                                <Text style={[styles.text, {fontSize:12, lineHeight:13}]}>{categoryMap[i]}</Text>
+                                            </Chip>                                            
+                                        )})}
+                                    </View>
+                                    
                                 </View>
                                 <Icon name='add' size={40} style={{alignSelf:'center'}} onPress={()=>addStop(item)} />
                             </View>) }
                         )
                         }
 
+                    </View>
+                </View>
+            )
+
+            case 4 : return (
+                <View style={styles.planContainer}>
+                    <View style={styles.imageContainer}>
+                        <ImageBackground source={{uri: addedStops[0].thumbUrl}} style={styles.planImage} imageStyle={{borderRadius:10}} >
+                            <View style={styles.planImageFooter}>
+                                <Text style={[styles.titleText, {textAlign:'left'}]}>{planName}</Text>
+                                <Text style={[styles.text, {}]}> <Icon name='location-on' size={18} /> {planCity} </Text>
+                            </View>
+                        </ImageBackground>
+                    </View>
+                    <View>
+                        <Text style={[styles.titleText, {textAlign:'left', fontSize:18}]}> Gezilecek noktalar </Text>
+                        { addedStops.map((item, index) => {return (
+                            <View style={styles.suggestionContainer}>
+                            <Image source={{uri:item.thumbUrl}} style={styles.typeImage} />
+                            <View style={{width:'80%'}}>
+                                <Text style={{color: 'black', fontFamily: darkTheme.fontRegular}} >
+                                    {item.name}
+                                    <Text style={{fontFamily: darkTheme.fontLight, color:'dimgray'}}>
+                                        {' '} &sdot; {' '}{item.location}
+                                    </Text> 
+                                </Text>
+                                <Text style={[styles.text, {color:'black'}]} numberOfLines={2}>
+                                    {item.body}
+                                </Text>
+                            </View>
+                        </View>
+                        )})
+                        }
                     </View>
                 </View>
             )
@@ -318,15 +366,23 @@ const Plan = ({navigation}) => {
         if (page < 4){
             switch (page){
                 case 2:
-                    getSuggestions()                    
+                    getSuggestions()
+                    setPage(page + 1)               
                     break;
-                case 3:
-                    submitPlan()
+                case 3: {
+                    if (addedStops.length === 0)
+                        Alert.alert('Hata','Rotanıza durak eklemediniz')
+                    else {
+                        submitPlan()
+                        setPage(page + 1)
+                    }
                     break;
+                }
                 default:
+                    setPage(page + 1)
                     break;    
             }
-            setPage(page + 1)
+            
         }
         else
             navigation.navigate('Planlar')
@@ -395,8 +451,8 @@ const styles = StyleSheet.create({
         opacity: 0.6
     },
     typeImage: {
-        width: 70,
-        height: 70,
+        width: 75,
+        height: 80,
         borderRadius: 10,
         backgroundColor:'black',
         marginRight: 10
@@ -479,9 +535,33 @@ const styles = StyleSheet.create({
         padding:10,
         width: '100%',
         justifyContent:'space-between',
-        marginBottom:10
-        
+        marginTop:10      
+    },
+    planContainer: {
+        backgroundColor: 'dimgray',
+        borderRadius: 10,
+        padding:10
+    },
+    imageContainer: {
+        marginBottom:15    
+    },
+    planImage: {
+        height: 200,
+        justifyContent:'flex-end'
+    },
+    locationChip: {
+        backgroundColor: 'teal',
+        borderRadius: 14,
+        marginRight: 5,
+        paddingTop:4
+    },
+    planImageFooter: {
+        backgroundColor: 'dimgray',
+        opacity: 0.7,
+        height: '30%',
+        padding: 5
     }
+    
     
 })
 

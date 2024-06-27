@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import { Text, StyleSheet, View, SafeAreaView, Image, ImageBackground } from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import { Text, StyleSheet, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, Alert, Animated } from 'react-native';
 import { HeaderSection } from './Home';
-import { ActivityIndicator, Card } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ActivityIndicator, Card, Dialog } from 'react-native-paper';
+import { GestureDetector, RectButton, ScrollView, Swipeable } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { Timestamp, collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { Timestamp, collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db, placesRef, plansRef, toursRef } from '../firebase';
 import CustomButton from '../custom-components/CustomButton';
 import { darkTheme } from '../utils/Theme';
 import { isNullOrEmpty } from '../utils/Methods';
+import { showToast } from '../utils/Toast';
 
 const Planlar = ({navigation}) => {           // TODO : Make this page reload when navigated to it
 
@@ -56,15 +57,9 @@ const Planlar = ({navigation}) => {           // TODO : Make this page reload wh
               arr.push(obj)
               if (index === result.docs.length - 1)
                 setPlans(arr)
-            //   getDoc(doc(db, 'places/' + obj.routeIds[0])).then(   // Because this damn firestore does not return collections of a document in .data()!
-            //     (res) => {
-            //         let picUrl = res.data().thumbUrl
-            //         arrUrls[obj.id] = picUrl
-            //         setPicUrls({...picUrls, arrUrls})
-            //     }
-            //   ).catch(err => console.log(err))
             });
-            
+            if (result.docs.length === 0)
+                setPlans(arr)
           })
           .catch(err => console.log(err.toString()))
           .finally(()=> {
@@ -78,6 +73,27 @@ const Planlar = ({navigation}) => {           // TODO : Make this page reload wh
         getPlans()
     }, []);
 
+
+    const deletePlan = (id) => {
+        deleteDoc(doc(db, 'plans/' + id))
+            .then(()=> {
+                showToast('Plan silindi.')
+                getPlans()
+            })
+            .catch(err => console.log('Hata: ' + err))
+    } 
+
+    const swipeableRef = useRef()
+
+    renderLeftActions = (progress, dragX) => {
+        return (
+          <View style={{width:'100%'}}>            
+          </View>
+        );
+      };
+    
+    
+
     const {text,  titleText, locationCard, locationImage, locationInfo, tourCard, tourInfo, tourImage,
             tourLeader, leaderImage, placesContainer } = styles
 
@@ -85,21 +101,31 @@ const Planlar = ({navigation}) => {           // TODO : Make this page reload wh
         <View style={styles.container}>
             <ScrollView>
                 
-                { plans.length > 0 &&
+                { plans.length > 0 ?
                   (
                     plans.map(
                         (item, index) => { return (
-                            <View key={index} style={styles.planCard} >
-                                <View >
-                                    <Image style={styles.planImage} source={!isNullOrEmpty(item.planPicUrl) ? {uri: item.planPicUrl} : require('../assets/images/image-not-found.png')} />
+                            <Swipeable key={index} ref={swipeableRef} renderLeftActions={renderLeftActions} 
+                                onSwipeableWillOpen={()=> Alert.alert('Onay','Plan silinsin mi?',[{text:'Hayır', onPress:()=>{swipeableRef.current.close()}}, {text:'Evet', onPress:()=>deletePlan(item.id)}])}
+                            >
+                                <View key={index} style={styles.planCard} >
+                                    <View >
+                                        <Image style={styles.planImage} source={!isNullOrEmpty(item.planPicUrl) ? {uri: item.planPicUrl} : require('../assets/images/image-not-found.png')} />
+                                    </View>
+                                    <View style={styles.planRight}>
+                                        <Text style={styles.planTitle}> {item.name} </Text>
+                                        <Text style={styles.text}> { !isNullOrEmpty(item.startDate) ? item.startDate.toDate().toDateString() : 'Belirsiz tarih' } - { isNullOrEmpty(item.endDate) ? 'Belirsiz tarih' : item.endDate.toDate().toDateString() } </Text>
+                                    </View>
                                 </View>
-                                <View style={styles.planRight}>
-                                    <Text style={styles.planTitle}> {item.name} </Text>
-                                    <Text style={styles.text}> { !isNullOrEmpty(item.startDate) ? item.startDate.toDate().toDateString() : 'Belirsiz tarih' } - { isNullOrEmpty(item.endDate) ? 'Belirsiz tarih' : item.endDate.toDate().toDateString() } </Text>
-                                </View>
-                            </View> )
+                            </Swipeable>
+                             )
                         }
                     )
+                  ) : (
+                    <View>
+                        <Text style={styles.text} > Buralar bomboş (beni düzenle) </Text>
+                        <Text></Text>
+                    </View>
                   )
                 }
 
@@ -261,6 +287,17 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         marginRight:5
       },
+      leftAction: {
+        backgroundColor: 'dimgray',
+        width:'100%',
+        height: '95%',
+        borderRadius:10,
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      actionText: {
+        color: 'white'
+      }
 })
 
 export default Planlar;

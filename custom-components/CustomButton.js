@@ -1,6 +1,8 @@
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 
 
+// This is the button I made. Also RectButton of GestureHandler can be handy.
+
 function CustomButton({title, onPress, fontSize, fontWeight, backgroundColor, style, thin, disabled}) {
     if (disabled) 
         return (
